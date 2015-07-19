@@ -41,7 +41,7 @@ speed. `anySprite.fps = 6`.
 animation.`anySprite.playAnimation()`. You can supply it with start and end frame values if you want to play a sub-set of frames. Here's how: `anySprite.playAnimation([startFrame, endFrame])` The animation will play in a loop, by default, unless you set the sprite's `loop` property value to `false`.
 
 3. `stopAnimation`: A method that stops the sprite's animation at the
-current frame. `andySprite.stopAnimation()`.
+current frame. `anySprite.stopAnimation()`.
 
 4. `show`: A method that displays a specific frame number.
 `anySprite.show(frameNumber)`.
@@ -52,7 +52,7 @@ current frame. `andySprite.stopAnimation()`.
 Use the`filmstrip` function to automatically turn a tileset PNG image
 into an array of textures that you can use to make a sprite.
 ```js
-filmstrip("anyTilesetImage", frameWidth, frameHeight, optionalPadding);
+filmstrip("anyTilesetImage.png", frameWidth, frameHeight, optionalPadding);
 ```
 Supply `filmstrip` with the tileset image name and the width and
 height of each frame. If there's padding around each frame, supply the

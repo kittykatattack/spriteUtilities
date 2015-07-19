@@ -104,6 +104,44 @@ let anySprite = sprite(texture);
 Use the `frame` function to
 [blit](https://en.wikipedia.org/wiki/Bit_blit) a smaller image from bigger image.
 
+`frameSeries`
+------------
+
+If you've loaded a texture atlas and want a sequence of numbered frame
+ids to create an animated sprite, use the `frameSeries` function.
+Imagine that you have frames in texture atlas with the following id
+names:
+```js
+frame0.png
+frame1.png
+frame2.png
+```
+To create a sprite in Pixi using these frames, you would ordinarily
+write some code that using Pixi's `MovieClip` class
+(`PIXI.extras.MovieClip`) that looks something like this:
+```js
+let frameTextures = ["frame0.png", "frame1.png", "frame2.png"];
+let anySprite = MovieClip.fromFrames(frameTextures);
+```
+You now have a sprite with 3 frames that you can control. That's not too painful, but what if you
+had 100 animation frames? You definitely don't want to manually type in
+100 frame id's into an array. Instead, use the `frameSeries` function.
+
+`frameSeries` takes four arguments: the start frame sequence number,
+the end frame sequence number, the optional base file name, and the optional file extension.
+You could use the `frameSeries` function to create the sprite from the
+texture atlas frame ids like this:
+```
+let frameTextures = frameSeries(0, 2, "frame", ".png");
+let anySprite = sprite(frameTextures);
+```
+If you had 100 animation frames, your code might look like this:
+```
+let frameTextures = frameSeries(0, 99, "frame", ".png");
+let anySprite = sprite(frameTextures);
+```
+That's much better!
+
 
 
 

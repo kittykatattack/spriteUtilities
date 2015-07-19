@@ -109,7 +109,7 @@ Use the `frame` function to
 
 If you've loaded a texture atlas and want a sequence of numbered frame
 ids to create an animated sprite, use the `frameSeries` function.
-Imagine that you have frames in texture atlas with the following id
+Imagine that you have frames in a texture atlas with the following id
 names:
 ```js
 frame0.png
@@ -117,7 +117,7 @@ frame1.png
 frame2.png
 ```
 To create a sprite in Pixi using these frames, you would ordinarily
-write some code that using Pixi's `MovieClip` class
+write some code using Pixi's `MovieClip` class
 (`PIXI.extras.MovieClip`) that looks something like this:
 ```js
 let frameTextures = ["frame0.png", "frame1.png", "frame2.png"];

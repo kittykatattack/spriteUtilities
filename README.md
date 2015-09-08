@@ -4,12 +4,26 @@ Pixi Sprite Utilities
 This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
 
+Setting up and initializing `SpriteUtilities`
+-------------------------------------------
+
+Create a new instance of `SpriteUtilities` like this:
+```js
+let u = new SpriteUtilities(PIXI);
+```
+Supply a reference to `PIXI` as the optional argument in the
+constructor. (If you don't supply it, `SpriteUtilites` will look for a
+global `PIXI` object and alert you with an error if it can't find it.)
+
+You can now access the `SpriteUtilites` instance and all its
+methods using the variable reference `u`.
+
 The `sprite` function
 -------------------
 
 Use the universal `sprite` function to make any kind of Pixi sprite.
 ```js
-let anySprite = sprite(frameTextures, xPosition, yPosition);
+let anySprite = u.sprite(frameTextures, xPosition, yPosition);
 ```
 The first argument, `frameTextures` can be any of the following: 
 
@@ -46,13 +60,16 @@ current frame. `anySprite.stopAnimation()`.
 4. `show`: A method that displays a specific frame number.
 `anySprite.show(frameNumber)`.
 
+5. `animating`: A Boolean property that will be `true` if the
+animation is playing and `false` if it isn't.
+
 `filmstrip`
 ----------
 
 Use the`filmstrip` function to automatically turn a tileset PNG image
 into an array of textures that you can use to make a sprite.
 ```js
-filmstrip("anyTilesetImage.png", frameWidth, frameHeight, optionalPadding);
+u.filmstrip("anyTilesetImage.png", frameWidth, frameHeight, optionalPadding);
 ```
 Supply `filmstrip` with the tileset image name and the width and
 height of each frame. If there's padding around each frame, supply the
@@ -61,8 +78,8 @@ you can use to make an animated `MovieClip` sprite.
 Here's how you could use `filmstrip` with the universal `sprite`
 function to quickly make a sprite with multiple frames: 
 ```js
-let textures = filmstrip("tileset.png", 32, 32);
-let anySprite = sprite(textures);
+let textures = u.filmstrip("tileset.png", 32, 32);
+let anySprite = u.sprite(textures);
 ```
 The `filmstrip` function automatically loads every frame from a tileset image into the sprite.
 
@@ -75,12 +92,12 @@ not all of them? Use another utility function called `frames`. The
 frame position coordinates, and the width and height of each frame.
 Here's how you could use the frames function to create a sprite.
 ```js
-let textures = frames(
+let textures = u.frames(
   "tileset.png",             //The tileset image
   [[0,0],[32,0],[64,0]],     //A 2D array of x/y frame coordianates
   32, 32                     //The width and height of each frame
 );
-let anySprite = sprite(textures);
+let anySprite = u.sprite(textures);
 ```
 Use the `frames` function whenever you need to create a sprite using
 selected frames from a larger tileset PNG image.
@@ -93,13 +110,13 @@ rectangular section of a larger image. The `frame` function takes
 four arguments: the image, the sub-image x position, the sub-image y
 position, and the sub-image's width and height.
 ```
-frame("image.png", x, y, width, height)
+u.frame("image.png", x, y, width, height)
 ```
 Here's how you could make a sprite using a sub-image of a larger
 image. 
 ```js
-let texture = frame("tileset.png", 64, 128, 32, 32);
-let anySprite = sprite(texture);
+let texture = u.frame("tileset.png", 64, 128, 32, 32);
+let anySprite = u.sprite(texture);
 ```
 Use the `frame` function to
 [blit](https://en.wikipedia.org/wiki/Bit_blit) a smaller image from bigger image.
@@ -132,13 +149,13 @@ the end frame sequence number, the optional base file name, and the optional fil
 You could use the `frameSeries` function to create the sprite from the
 texture atlas frame ids like this:
 ```
-let frameTextures = frameSeries(0, 2, "frame", ".png");
-let anySprite = sprite(frameTextures);
+let frameTextures = u.frameSeries(0, 2, "frame", ".png");
+let anySprite = u.sprite(frameTextures);
 ```
 If you had 100 animation frames, your code might look like this:
 ```
-let frameTextures = frameSeries(0, 99, "frame", ".png");
-let anySprite = sprite(frameTextures);
+let frameTextures = u.frameSeries(0, 99, "frame", ".png");
+let anySprite = u.sprite(frameTextures);
 ```
 That's much better!
 

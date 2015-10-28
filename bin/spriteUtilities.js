@@ -19,12 +19,16 @@ var SpriteUtilities = (function () {
     if (renderingEngine.ParticleContainer && renderingEngine.Sprite) {
       this.renderer = "pixi";
       this.Container = renderingEngine.Container;
+      this.ParticleContainer = renderingEngine.ParticleContainer;
       this.TextureCache = renderingEngine.utils.TextureCache;
       this.Texture = renderingEngine.Texture;
       this.Rectangle = renderingEngine.Rectangle;
       this.MovieClip = renderingEngine.extras.MovieClip;
+      this.BitmapText = renderingEngine.extras.BitmapText;
       this.Sprite = renderingEngine.Sprite;
       this.TilingSprite = renderingEngine.extras.TilingSprite;
+      this.Graphics = renderingEngine.Graphics;
+      this.Text = renderingEngine.Text;
     }
   }
 
@@ -124,9 +128,6 @@ var SpriteUtilities = (function () {
         //If the sprite is a MovieClip, add a state player so that
         //it's easier to control
         if (o instanceof this.MovieClip) this.addStatePlayer(o);
-
-        //Add some extra properties to the sprite
-        //addProperties(o);
 
         //Assign the sprite
         return o;
@@ -378,6 +379,352 @@ var SpriteUtilities = (function () {
         frames.push(frame);
       }
       return frames;
+    }
+  }, {
+    key: "text",
+
+    /* Text creation */
+
+    //The`text` method is a quick way to create a Pixi Text sprite
+    value: function text() {
+      var content = arguments[0] === undefined ? "message" : arguments[0];
+      var font = arguments[1] === undefined ? "16px sans" : arguments[1];
+      var fillStyle = arguments[2] === undefined ? "red" : arguments[2];
+      var x = arguments[3] === undefined ? 0 : arguments[3];
+      var y = arguments[4] === undefined ? 0 : arguments[4];
+
+      //Create a Pixi Sprite object
+      var message = new this.Text(content, { font: font, fill: fillStyle });
+      message.x = x;
+      message.y = y;
+
+      //Add a `_text` property with a getter/setter
+      message._content = content;
+      Object.defineProperty(message, "content", {
+        get: function get() {
+          return this._content;
+        },
+        set: function set(value) {
+          this._content = value;
+          this.text = value;
+        },
+        enumerable: true, configurable: true
+      });
+
+      //Return the text object
+      return message;
+    }
+  }, {
+    key: "bitmapText",
+
+    //The`bitmapText` method lets you create bitmap text
+    value: function bitmapText(content, font, align, tint) {
+      if (content === undefined) content = "message";
+      var x = arguments[4] === undefined ? 0 : arguments[4];
+      var y = arguments[5] === undefined ? 0 : arguments[5];
+
+      //Create a Pixi Sprite object
+      var message = new this.BitmapText(content, { font: font, align: align, tint: tint });
+      message.x = x;
+      message.y = y;
+
+      //Add a `_text` property with a getter/setter
+      message._content = content;
+      Object.defineProperty(message, "content", {
+        get: function get() {
+          return this._content;
+        },
+        set: function set(value) {
+          this._content = value;
+          this.text = value;
+        },
+        enumerable: true, configurable: true
+      });
+
+      //Return the text object
+      return message;
+    }
+  }, {
+    key: "rectangle",
+
+    /* Shapes and lines */
+
+    //Rectangle
+    value: function rectangle() {
+      var width = arguments[0] === undefined ? 32 : arguments[0];
+      var height = arguments[1] === undefined ? 32 : arguments[1];
+      var fillStyle = arguments[2] === undefined ? 16724736 : arguments[2];
+      var strokeStyle = arguments[3] === undefined ? 13260 : arguments[3];
+      var lineWidth = arguments[4] === undefined ? 0 : arguments[4];
+      var x = arguments[5] === undefined ? 0 : arguments[5];
+      var y = arguments[6] === undefined ? 0 : arguments[6];
+
+      //Draw the rectangle
+      var rectangle = new this.Graphics();
+      rectangle.beginFill(fillStyle);
+      if (lineWidth > 0) {
+        rectangle.lineStyle(lineWidth, strokeStyle, 1);
+      }
+      rectangle.drawRect(0, 0, width, height);
+      rectangle.endFill();
+
+      //Generate a texture from the rectangle
+      var texture = rectangle.generateTexture();
+
+      //Use the texture to create a sprite
+      var sprite = new this.Sprite(texture);
+
+      //Position the sprite
+      sprite.x = x;
+      sprite.y = y;
+
+      //Return the sprite
+      return sprite;
+    }
+  }, {
+    key: "circle",
+
+    //Circle
+    value: function circle() {
+      var diameter = arguments[0] === undefined ? 32 : arguments[0];
+      var fillStyle = arguments[1] === undefined ? 16724736 : arguments[1];
+      var strokeStyle = arguments[2] === undefined ? 13260 : arguments[2];
+      var lineWidth = arguments[3] === undefined ? 0 : arguments[3];
+      var x = arguments[4] === undefined ? 0 : arguments[4];
+      var y = arguments[5] === undefined ? 0 : arguments[5];
+
+      //Draw the circle
+      var circle = new this.Graphics();
+      circle.beginFill(fillStyle);
+      if (lineWidth > 0) {
+        circle.lineStyle(lineWidth, strokeStyle, 1);
+      }
+      circle.drawCircle(0, 0, diameter / 2);
+      circle.endFill();
+
+      //Generate a texture from the rectangle
+      var texture = circle.generateTexture();
+
+      //Use the texture to create a sprite
+      var sprite = new this.Sprite(texture);
+
+      //Position the sprite
+      sprite.x = x;
+      sprite.y = y;
+
+      //Return the sprite
+      return sprite;
+    }
+  }, {
+    key: "line",
+
+    //Line
+    value: function line() {
+      var strokeStyle = arguments[0] === undefined ? 0 : arguments[0];
+      var lineWidth = arguments[1] === undefined ? 1 : arguments[1];
+      var ax = arguments[2] === undefined ? 0 : arguments[2];
+      var ay = arguments[3] === undefined ? 0 : arguments[3];
+      var bx = arguments[4] === undefined ? 32 : arguments[4];
+      var by = arguments[5] === undefined ? 32 : arguments[5];
+
+      //Create the line object
+      var line = new this.Graphics();
+
+      //Add properties
+      line._ax = ax;
+      line._ay = ay;
+      line._bx = bx;
+      line._by = by;
+      line.strokeStyle = strokeStyle;
+      line.lineWidth = lineWidth;
+
+      //A helper function that draws the line
+      line.draw = function () {
+        line.clear();
+        line.lineStyle(lineWidth, strokeStyle, 1);
+        line.moveTo(line._ax, line._ay);
+        line.lineTo(line._bx, line._by);
+      };
+      line.draw();
+
+      //Define getters and setters that redefine the line's start and
+      //end points and re-draws it if they change
+      Object.defineProperties(line, {
+        "ax": {
+          get: function get() {
+            return this._ax;
+          },
+          set: function set(value) {
+            this._ax = value;
+            this.draw();
+          },
+          enumerable: true, configurable: true
+        },
+        "ay": {
+          get: function get() {
+            return this._ay;
+          },
+          set: function set(value) {
+            this._ay = value;
+            this.draw();
+          },
+          enumerable: true, configurable: true
+        },
+        "bx": {
+          get: function get() {
+            return this._bx;
+          },
+          set: function set(value) {
+            this._bx = value;
+            this.draw();
+          },
+          enumerable: true, configurable: true
+        },
+        "by": {
+          get: function get() {
+            return this._by;
+          },
+          set: function set(value) {
+            this._by = value;
+            this.draw();
+          },
+          enumerable: true, configurable: true
+        }
+      });
+
+      //Return the line
+      return line;
+    }
+  }, {
+    key: "grid",
+
+    /* Compound sprites */
+
+    //Use `grid` to create a grid of sprites
+    value: function grid() {
+      var columns = arguments[0] === undefined ? 0 : arguments[0];
+      var rows = arguments[1] === undefined ? 0 : arguments[1];
+      var cellWidth = arguments[2] === undefined ? 32 : arguments[2];
+      var cellHeight = arguments[3] === undefined ? 32 : arguments[3];
+      var centerCell = arguments[4] === undefined ? false : arguments[4];
+      var xOffset = arguments[5] === undefined ? 0 : arguments[5];
+      var yOffset = arguments[6] === undefined ? 0 : arguments[6];
+      var makeSprite = arguments[7] === undefined ? undefined : arguments[7];
+      var extra = arguments[8] === undefined ? undefined : arguments[8];
+
+      //Create an empty group called `container`. This `container`
+      //group is what the function returns back to the main program.
+      //All the sprites in the grid cells will be added
+      //as children to this container
+      var container = new this.Container();
+
+      //The `create` method plots the grid
+
+      var createGrid = function createGrid() {
+
+        //Figure out the number of cells in the grid
+        var length = columns * rows;
+
+        //Create a sprite for each cell
+        for (var i = 0; i < length; i++) {
+
+          //Figure out the sprite's x/y placement in the grid
+          var x = i % columns * cellWidth,
+              y = Math.floor(i / columns) * cellHeight;
+
+          //Use the `makeSprite` function supplied in the constructor
+          //to make a sprite for the grid cell
+          var sprite = makeSprite();
+
+          //Add the sprite to the `container`
+          container.addChild(sprite);
+
+          //Should the sprite be centered in the cell?
+
+          //No, it shouldn't be centered
+          if (!centerCell) {
+            sprite.x = x + xOffset;
+            sprite.y = y + yOffset;
+          }
+
+          //Yes, it should be centered
+          else {
+            sprite.x = x + cellWidth / 2 - sprite.width / 2 + xOffset;
+            sprite.y = y + cellHeight / 2 - sprite.width / 2 + yOffset;
+          }
+
+          //Run any optional extra code. This calls the
+          //`extra` function supplied by the constructor
+          if (extra) extra(sprite);
+        }
+      };
+
+      //Run the `createGrid` method
+      createGrid();
+
+      //Return the `container` group back to the main program
+      return container;
+    }
+  }, {
+    key: "group",
+
+    /* Groups */
+
+    //Group sprites into a container
+    value: function group() {
+      for (var _len = arguments.length, sprites = Array(_len), _key = 0; _key < _len; _key++) {
+        sprites[_key] = arguments[_key];
+      }
+
+      var container = new this.Container();
+      sprites.forEach(function (sprite) {
+        container.addChild(sprite);
+      });
+      return container;
+    }
+  }, {
+    key: "batch",
+
+    //Use the `batch` method to create a ParticleContainer
+    value: function batch() {
+      var size = arguments[0] === undefined ? 15000 : arguments[0];
+      var options = arguments[1] === undefined ? { rotation: true, alpha: true, scale: true, uvs: true } : arguments[1];
+
+      var batch = new this.ParticleContainer(size, options);
+      return batch;
+    }
+  }, {
+    key: "remove",
+
+    //`remove` is a global convenience method that will
+    //remove any sprite, or an argument list of sprites, from its parent.
+    value: function remove() {
+      for (var _len2 = arguments.length, spritesToRemove = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        spritesToRemove[_key2] = arguments[_key2];
+      }
+
+      //Remove sprites that's aren't in an array
+      if (!(sprites[0] instanceof Array)) {
+        if (sprites.length > 1) {
+          sprites.forEach(function (sprite) {
+            sprite.parent.removeChild(sprite);
+          });
+        } else {
+          sprites[0].parent.removeChild(sprites[0]);
+        }
+      }
+
+      //Remove sprites in an array of sprites
+      else {
+        var spritesArray = sprites[0];
+        if (spritesArray.length > 0) {
+          for (var i = spritesArray.length - 1; i >= 0; i--) {
+            var sprite = spritesArray[i];
+            sprite.parent.removeChild(sprite);
+            spritesArray.splice(spritesArray.indexOf(sprite), 1);
+          }
+        }
+      }
     }
   }]);
 

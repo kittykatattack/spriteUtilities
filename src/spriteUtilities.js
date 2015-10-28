@@ -9,12 +9,16 @@ class SpriteUtilities{
     if (renderingEngine.ParticleContainer && renderingEngine.Sprite) {
       this.renderer = "pixi";
       this.Container = renderingEngine.Container;
+      this.ParticleContainer = renderingEngine.ParticleContainer;
       this.TextureCache = renderingEngine.utils.TextureCache;
       this.Texture = renderingEngine.Texture;
       this.Rectangle = renderingEngine.Rectangle;
       this.MovieClip = renderingEngine.extras.MovieClip;
+      this.BitmapText = renderingEngine.extras.BitmapText;
       this.Sprite = renderingEngine.Sprite;
       this.TilingSprite = renderingEngine.extras.TilingSprite;
+      this.Graphics = renderingEngine.Graphics;
+      this.Text = renderingEngine.Text;
     }
   }
 
@@ -108,9 +112,6 @@ class SpriteUtilities{
       //If the sprite is a MovieClip, add a state player so that
       //it's easier to control
       if (o instanceof this.MovieClip) this.addStatePlayer(o);
-
-      //Add some extra properties to the sprite 
-      //addProperties(o);
 
       //Assign the sprite
       return o;
@@ -353,6 +354,321 @@ class SpriteUtilities{
     }
     return frames;
   }
+
+  /* Text creation */
+
+  //The`text` method is a quick way to create a Pixi Text sprite
+  text(content = "message", font = "16px sans", fillStyle = "red", x = 0, y = 0) {
+
+    //Create a Pixi Sprite object
+    let message = new this.Text(content, {font: font, fill: fillStyle});
+    message.x = x;
+    message.y = y;
+
+    //Add a `_text` property with a getter/setter
+    message._content = content;
+    Object.defineProperty(message, "content", {
+      get() {
+        return this._content;
+      },
+      set(value) {
+        this._content = value;
+        this.text = value;
+      },
+      enumerable: true, configurable: true
+    });
+
+    //Return the text object
+    return message;
+  }
+
+  //The`bitmapText` method lets you create bitmap text
+  bitmapText(content = "message", font, align, tint, x = 0, y = 0) {
+
+    //Create a Pixi Sprite object
+    let message = new this.BitmapText(content, {font: font, align: align, tint: tint});
+    message.x = x;
+    message.y = y;
+
+    //Add a `_text` property with a getter/setter
+    message._content = content;
+    Object.defineProperty(message, "content", {
+      get() {
+        return this._content;
+      },
+      set(value) {
+        this._content = value;
+        this.text = value;
+      },
+      enumerable: true, configurable: true
+    });
+
+    //Return the text object
+    return message;
+  }
+
+  /* Shapes and lines */
+
+  //Rectangle
+  rectangle(
+      width = 32, 
+      height = 32,  
+      fillStyle = 0xFF3300, 
+      strokeStyle = 0x0033CC, 
+      lineWidth = 0,
+      x = 0, 
+      y = 0 
+    ){
+
+    //Draw the rectangle
+    let rectangle = new this.Graphics();
+    rectangle.beginFill(fillStyle);
+    if (lineWidth > 0) {
+      rectangle.lineStyle(lineWidth, strokeStyle, 1);
+    }
+    rectangle.drawRect(0, 0, width, height);
+    rectangle.endFill();
+
+    //Generate a texture from the rectangle
+    let texture = rectangle.generateTexture();
+
+    //Use the texture to create a sprite
+    let sprite = new this.Sprite(texture);
+
+    //Position the sprite
+    sprite.x = x;
+    sprite.y = y;
+
+    //Return the sprite
+    return sprite;
+  }
+
+  //Circle
+  circle(
+      diameter = 32, 
+      fillStyle = 0xFF3300, 
+      strokeStyle = 0x0033CC, 
+      lineWidth = 0,
+      x = 0, 
+      y = 0 
+    ){
+
+    //Draw the circle
+    let circle = new this.Graphics();
+    circle.beginFill(fillStyle);
+    if (lineWidth > 0) {
+      circle.lineStyle(lineWidth, strokeStyle, 1);
+    }
+    circle.drawCircle(0, 0, diameter / 2);
+    circle.endFill();
+
+    //Generate a texture from the rectangle
+    let texture = circle.generateTexture();
+
+    //Use the texture to create a sprite
+    let sprite = new this.Sprite(texture);
+
+    //Position the sprite
+    sprite.x = x;
+    sprite.y = y;
+
+    //Return the sprite
+    return sprite;
+  }
+
+  //Line
+  line(
+      strokeStyle = 0x000000, 
+      lineWidth = 1, 
+      ax = 0, 
+      ay = 0, 
+      bx = 32, 
+      by = 32
+    ){
+
+    //Create the line object
+    let line = new this.Graphics();
+
+    //Add properties
+    line._ax = ax;
+    line._ay = ay;
+    line._bx = bx;
+    line._by = by;
+    line.strokeStyle = strokeStyle;
+    line.lineWidth = lineWidth;
+
+    //A helper function that draws the line
+    line.draw = () => {
+      line.clear();
+      line.lineStyle(lineWidth, strokeStyle, 1);
+      line.moveTo(line._ax, line._ay);
+      line.lineTo(line._bx, line._by);
+    };
+    line.draw();
+
+    //Define getters and setters that redefine the line's start and 
+    //end points and re-draws it if they change
+    Object.defineProperties(line, {
+      "ax": {
+        get() {
+          return this._ax;
+        },
+        set(value) {
+          this._ax = value;
+          this.draw();
+        }, 
+        enumerable: true, configurable: true
+      },
+      "ay": {
+        get() {
+          return this._ay;
+        },
+        set(value) {
+          this._ay = value;
+          this.draw();
+        }, 
+        enumerable: true, configurable: true
+      },
+      "bx": {
+        get() {
+          return this._bx;
+        },
+        set(value) {
+          this._bx = value;
+          this.draw();
+        }, 
+        enumerable: true, configurable: true
+      },
+      "by": {
+        get() {
+          return this._by;
+        },
+        set(value) {
+          this._by = value;
+          this.draw();
+        }, 
+        enumerable: true, configurable: true
+      },
+    });
+
+    //Return the line
+    return line;
+  }
+
+  /* Compound sprites */
+
+  //Use `grid` to create a grid of sprites
+  grid(
+    columns = 0, rows = 0, cellWidth = 32, cellHeight = 32,
+    centerCell = false, xOffset = 0, yOffset = 0,
+    makeSprite = undefined,
+    extra = undefined
+  ){
+
+    //Create an empty group called `container`. This `container`
+    //group is what the function returns back to the main program.
+    //All the sprites in the grid cells will be added
+    //as children to this container
+    let container = new this.Container();
+
+    //The `create` method plots the grid
+
+    let createGrid = () => {
+
+      //Figure out the number of cells in the grid
+      let length = columns * rows;
+
+      //Create a sprite for each cell
+      for(let i = 0; i < length; i++) {
+
+        //Figure out the sprite's x/y placement in the grid
+        let x = (i % columns) * cellWidth,
+            y = Math.floor(i / columns) * cellHeight;
+
+        //Use the `makeSprite` function supplied in the constructor
+        //to make a sprite for the grid cell
+        let sprite = makeSprite();
+
+        //Add the sprite to the `container`
+        container.addChild(sprite);
+
+        //Should the sprite be centered in the cell?
+
+        //No, it shouldn't be centered
+        if (!centerCell) {
+          sprite.x = x + xOffset;
+          sprite.y = y + yOffset;
+        }
+
+        //Yes, it should be centered
+        else {
+          sprite.x 
+            = x + (cellWidth / 2) 
+            - (sprite.width / 2) + xOffset;
+          sprite.y 
+            = y + (cellHeight / 2) 
+            - (sprite.width / 2) + yOffset;
+        }
+
+        //Run any optional extra code. This calls the
+        //`extra` function supplied by the constructor
+        if (extra) extra(sprite);
+      }
+    };
+
+    //Run the `createGrid` method
+    createGrid();
+
+    //Return the `container` group back to the main program
+    return container;
+  }
+
+
+  /* Groups */
+
+  //Group sprites into a container
+  group(...sprites) {
+    let container = new this.Container();
+    sprites.forEach(sprite => {
+      container.addChild(sprite);
+    });
+    return container;
+  }
+
+  //Use the `batch` method to create a ParticleContainer
+  batch(size = 15000, options = {rotation: true, alpha: true, scale: true, uvs: true}) {
+    let batch = new this.ParticleContainer(size, options);
+    return batch;
+  }
+
+  //`remove` is a global convenience method that will
+  //remove any sprite, or an argument list of sprites, from its parent.
+  remove(...spritesToRemove) {
+
+    //Remove sprites that's aren't in an array
+    if (!(sprites[0] instanceof Array)) {
+      if (sprites.length > 1) {
+        sprites.forEach(sprite  => {
+          sprite.parent.removeChild(sprite);
+        });
+      } else {
+        sprites[0].parent.removeChild(sprites[0]);
+      }
+    }
+
+    //Remove sprites in an array of sprites
+    else {
+      let spritesArray = sprites[0];
+      if (spritesArray.length > 0) {
+        for (let i = spritesArray.length - 1; i >= 0; i--) {
+          let sprite = spritesArray[i];
+          sprite.parent.removeChild(sprite);
+          spritesArray.splice(spritesArray.indexOf(sprite), 1);
+        }
+      }
+    }
+  }
+  
 }
 
 

@@ -4,23 +4,23 @@ Pixi Sprite Utilities
 This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
 
-[Setting up](#settingup).
-[sprite: Quickly make any Sprite or MovieClip](#sprite).
-[filmstrip: Turn any tileset PNG into a texture array](#filmstrip).
-[frames: Capture a subset of frames from a PNG tileset](#frames).
+[Setting up](#settingup) <br>
+[sprite: Quickly make any Sprite or MovieClip](#sprite)<br>
+[filmstrip: Turn any tileset PNG into a texture array](#filmstrip)<br>
+[frames: Capture a subset of frames from a PNG tileset](#frames)<br>
 [frame: Capture a single rectangular area inside PNG image or
-tileset](#frame).
+tileset](#frame)<br>
 [frameSeries: Captures a sequence of numbered frame ids from a
-textureatlas](#frameSeries).
-[text: Make a text sprite](#text).
-[bitmaptext: Make a bitmaptext sprite](#bitmaptext).
-[rectangle: Draw a rectangle](#rectangle).
-[circle: Draw a circle](#circle).
-[line: Draw a line](#line).
-[grid: Create a grid of sprites](#grid).
-[group: Group sprites](#group).
-[batch: Create a particle container](#batch).
-[remove: Remove a sprite or array of sprites from its parent](#batch).
+textureatlas](#frameSeries)<br>
+[text: Make a text sprite](#text)<br>
+[bitmaptext: Make a bitmaptext sprite](#bitmaptext)<br>
+[rectangle: Draw a rectangle](#rectangle)<br>
+[circle: Draw a circle](#circle)<br>
+[line: Draw a line](#line)<br>
+[grid: Create a grid of sprites](#grid)<br>
+[group: Group sprites](#group)<br>
+[batch: Create a particle container](#batch)<br>
+[remove: Remove a sprite or array of sprites from its parent](#batch)<br>
 
 <a id="settingup"></a>
 Setting up and initializing `SpriteUtilities`

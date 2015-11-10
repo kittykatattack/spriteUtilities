@@ -8,12 +8,10 @@ This repository contains a bunch of useful functions for creating
 [sprite: Quickly make any Sprite or MovieClip](#sprite)<br>
 [filmstrip: Turn any tileset PNG into a texture array](#filmstrip)<br>
 [frames: Capture a subset of frames from a PNG tileset](#frames)<br>
-[frame: Capture a single rectangular area inside PNG image or
-tileset](#frame)<br>
-[frameSeries: Captures a sequence of numbered frame ids from a
-textureatlas](#frameSeries)<br>
+[frame: Capture a single rectangular area inside PNG image or tileset](#frame)<br>
+[frameSeries: Captures a sequence of numbered frame ids from a textureatlas](#frameSeries)<br>
 [text: Make a text sprite](#text)<br>
-[bitmaptext: Make a bitmaptext sprite](#bitmaptext)<br>
+[bitmaptext: Make a BitmapText sprite](#bitmaptext)<br>
 [rectangle: Draw a rectangle](#rectangle)<br>
 [circle: Draw a circle](#circle)<br>
 [line: Draw a line](#line)<br>
@@ -21,6 +19,7 @@ textureatlas](#frameSeries)<br>
 [group: Group sprites](#group)<br>
 [batch: Create a particle container](#batch)<br>
 [remove: Remove a sprite or array of sprites from its parent](#batch)<br>
+[color: Convert a HTML or RGBA color to a Hex color code](#color)<br>
 
 <a id="settingup"></a>
 Setting up and initializing `SpriteUtilities`
@@ -250,20 +249,24 @@ u.rectangle(
 ```
 `width` and `height` are the size, in pixels, of the rectangle.
 They're the only two arguments that are required.
-`fillStyle` is a hexadecimal color code for the inside fill color of the
-rectangle, and `strokeStyle` is the hex color code for the outline.
+`fillStyle` is color for the inside fill color of the
+rectangle, and `strokeStyle` is the color code for the outline. (You
+can use hex colors, RGBA colors, or even any HTML color names, like "blue" or "pink".)
 `lineWidth` determines how thick, in pixels, the rectangle's outline
 should be. (The default value is 0, which means the rectangle will have
 no outline.) The last two values are the rectangle's x and y
 position.
 
-Here's how to use the `rectangle` method to create a black square
-with a 2 pixel wide red outline:
+Here's how to use the `rectangle` method to create a green square
+with a 2 pixel wide pink outline:
 ```js
-let square = u.rectangle(64, 64, "0x000000", "0x0033CC", 2);
+let square = u.rectangle(64, 64, "seaGreen", "hotPink", 2);
 ```
 (Because the last two arguments, x and y, haven't been provided, the
 rectangle will have default x and y values of 0.)
+
+Rectangles also have `strokeStyle`, `lineStyle` and `lineWidth` properties
+that you can change at any time.
 
 <a id="circle"></a>
 `circle`
@@ -275,10 +278,10 @@ u.circle(diameter, fillStyle, strokeStyle, lineWidth, xPosition, yPosition)
 ```
 The arguments are similar to the `rectangle` method's arguments,
 except that the fist one is the diameter, in pixels, of the circle you
-want to draw. Here's how to draw a white circle with a diameter of 64
-pixels and a red outline 3 pixels wide.
+want to draw. Here's how to draw a blue circle with a diameter of 64
+pixels and a purple outline 3 pixels wide.
 ```js
-let ball = u.circle(64, "0xFFFFFF", "0x0033CC", 3);
+let ball = u.circle(64, "powderBlue", "plum", 3);
 ```
 A circle's x and y position is anchored to the top left corner of an
 invisible rectangular bounding box that is surrounding the circle. To
@@ -291,6 +294,9 @@ This sets the `x` and `y` positions to `0.5`, which means "the
 positions that are at half the circle's width and height". In other
 words, its center.
 
+Circles have `fillStyle`, `strokeStyle`, `diameter` and `radius` properties that
+you can access and change later if you need to.
+
 <a id="line"></a>
 `line`
 -----
@@ -298,14 +304,19 @@ The `line` method lets you quickly draw a straight line.
 ```js
 u.line(color, width, ax, ay, bx, by)
 ```
-The `color` should be a hexadecimal color value. The last four arguments define the line's start and end points. `ax`
+The `color` should be a hexadecimal color value. (Just as with
+rectangles or cirlces, you
+can use hex colors, RGBA colors, or HTML  color name strings.) The last four arguments define the line's start and end points. `ax`
 and `ay` are it's start point; `bx` and `by` are it's end points.
-Here's how to create black line, 3 pixels wide, with a start x/y point
+Here's how to create red line, 3 pixels wide, with a start x/y point
 of 64 and and an end x/y point of 128.
 
 ```js
-let diagonal = u.line(0x000000, 3, 64, 64, 128, 128);
+let diagonal = u.line(0xff0000, 3, 64, 64, 128, 128);
 ```
+(Yes, as you can see above, you can use a hex color code with
+rectangles, circles or lines if you want to!)
+
 You can change the start and end points at any time. Here's how you
 set the line's end point to an x position of 100 and a y position of
 90.
@@ -315,6 +326,9 @@ diagonal.by = 90;
 ```
 The line will be re-drawn to these coordinates as soon as you set
 them.
+
+Lines have `ax`, `ay`, `bx`, `by`, `strokeStyle` and `width`
+properties that you can acess and change.
 
 <a id="grid"></a>
 `grid`
@@ -342,7 +356,7 @@ let circles = u.grid(
     return ball;
   },
 
-  //Run any optional extra code after each //peg is made
+  //Run any optional extra code after each ball is made
   () => console.log("extra!")
 );
 
@@ -419,7 +433,18 @@ u.remove(arrayOfSprites);
 ```
 Easy!
 
+<a id="color"></a>
+`color`: Convert HTML and RGBA colors to Hexadecimal
+------------------------------------------------------------
 
+Do you like Pixi, but don't like Hexadecimal color codes? Use
+`color` to convert any ordinary HTML color string name (like
+"blue" or "green",) or any RGBA value to its equivalent Hex code.
+```js
+let hexColor = u.color("darkSeaGreen");
+```
+Now just use `hexColor` wherever Pixi asks for a color code. Yes, all
+of the HTML color string names are supported.
 
 
 

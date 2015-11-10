@@ -459,17 +459,31 @@ var SpriteUtilities = (function () {
       var x = arguments[5] === undefined ? 0 : arguments[5];
       var y = arguments[6] === undefined ? 0 : arguments[6];
 
+      var o = new this.Graphics();
+      o._sprite = undefined;
+      o._width = width;
+      o._height = height;
+      o._fillStyle = this.color(fillStyle);
+      o._strokeStyle = this.color(strokeStyle);
+      o._lineWidth = lineWidth;
+
       //Draw the rectangle
-      var rectangle = new this.Graphics();
-      rectangle.beginFill(fillStyle);
-      if (lineWidth > 0) {
-        rectangle.lineStyle(lineWidth, strokeStyle, 1);
-      }
-      rectangle.drawRect(0, 0, width, height);
-      rectangle.endFill();
+      var draw = function draw(width, height, fillStyle, strokeStyle, lineWidth) {
+        o.clear();
+        o.beginFill(fillStyle);
+        if (lineWidth > 0) {
+          o.lineStyle(lineWidth, strokeStyle, 1);
+        }
+        o.drawRect(0, 0, width, height);
+        o.endFill();
+      };
+
+      //Draw the line and capture the sprite that the `draw` function
+      //returns
+      draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
 
       //Generate a texture from the rectangle
-      var texture = rectangle.generateTexture();
+      var texture = o.generateTexture();
 
       //Use the texture to create a sprite
       var sprite = new this.Sprite(texture);
@@ -477,6 +491,63 @@ var SpriteUtilities = (function () {
       //Position the sprite
       sprite.x = x;
       sprite.y = y;
+
+      //Add getters and setters to the sprite
+      var self = this;
+      Object.defineProperties(sprite, {
+        "fillStyle": {
+          get: function get() {
+            return o._fillStyle;
+          },
+          set: function set(value) {
+            o._fillStyle = self.color(value);
+
+            //Draw the new rectangle
+            draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        },
+        "strokeStyle": {
+          get: function get() {
+            return o._strokeStyle;
+          },
+          set: function set(value) {
+            o._strokeStyle = self.color(value);
+
+            //Draw the new rectangle
+            draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        },
+        "lineWidth": {
+          get: function get() {
+            return o._lineWidth;
+          },
+          set: function set(value) {
+            o._lineWidth = value;
+
+            //Draw the new rectangle
+            draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        }
+      });
+
+      //Get a local reference to the sprite so that we can
+      //change the rectangle properties later using the getters/setters
+      o._sprite = sprite;
 
       //Return the sprite
       return sprite;
@@ -493,17 +564,28 @@ var SpriteUtilities = (function () {
       var x = arguments[4] === undefined ? 0 : arguments[4];
       var y = arguments[5] === undefined ? 0 : arguments[5];
 
+      var o = new this.Graphics();
+      o._diameter = diameter;
+      o._fillStyle = this.color(fillStyle);
+      o._strokeStyle = this.color(strokeStyle);
+      o._lineWidth = lineWidth;
+
       //Draw the circle
-      var circle = new this.Graphics();
-      circle.beginFill(fillStyle);
-      if (lineWidth > 0) {
-        circle.lineStyle(lineWidth, strokeStyle, 1);
-      }
-      circle.drawCircle(0, 0, diameter / 2);
-      circle.endFill();
+      var draw = function draw(diameter, fillStyle, strokeStyle, lineWidth) {
+        o.clear();
+        o.beginFill(fillStyle);
+        if (lineWidth > 0) {
+          o.lineStyle(lineWidth, strokeStyle, 1);
+        }
+        o.drawCircle(0, 0, diameter / 2);
+        o.endFill();
+      };
+
+      //Draw the cirlce
+      draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
       //Generate a texture from the rectangle
-      var texture = circle.generateTexture();
+      var texture = o.generateTexture();
 
       //Use the texture to create a sprite
       var sprite = new this.Sprite(texture);
@@ -511,6 +593,77 @@ var SpriteUtilities = (function () {
       //Position the sprite
       sprite.x = x;
       sprite.y = y;
+
+      //Add getters and setters to the sprite
+      var self = this;
+      Object.defineProperties(sprite, {
+        "fillStyle": {
+          get: function get() {
+            return o._fillStyle;
+          },
+          set: function set(value) {
+            o._fillStyle = self.color(value);
+
+            //Draw the cirlce
+            draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        },
+        "strokeStyle": {
+          get: function get() {
+            return o._strokeStyle;
+          },
+          set: function set(value) {
+            o._strokeStyle = self.color(value);
+
+            //Draw the cirlce
+            draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        },
+        "diameter": {
+          get: function get() {
+            return o._diameter;
+          },
+          set: function set(value) {
+            o._lineWidth = 10;
+
+            //Draw the cirlce
+            draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        },
+        "radius": {
+          get: function get() {
+            return o._diameter / 2;
+          },
+          set: function set(value) {
+
+            //Draw the cirlce
+            draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
+
+            //Generate a new texture and set it as the sprite's texture
+            var texture = o.generateTexture();
+            o._sprite.texture = texture;
+          },
+          enumerable: true, configurable: true
+        }
+      });
+      //Get a local reference to the sprite so that we can
+      //change the circle properties later using the getters/setters
+      o._sprite = sprite;
 
       //Return the sprite
       return sprite;
@@ -528,72 +681,99 @@ var SpriteUtilities = (function () {
       var by = arguments[5] === undefined ? 32 : arguments[5];
 
       //Create the line object
-      var line = new this.Graphics();
+      var o = new this.Graphics();
 
-      //Add properties
-      line._ax = ax;
-      line._ay = ay;
-      line._bx = bx;
-      line._by = by;
-      line.strokeStyle = strokeStyle;
-      line.lineWidth = lineWidth;
+      //Private properties
+      o._strokeStyle = this.color(strokeStyle);
+      o._width = lineWidth;
+      o._ax = ax;
+      o._ay = ay;
+      o._bx = bx;
+      o._by = by;
 
       //A helper function that draws the line
-      line.draw = function () {
-        line.clear();
-        line.lineStyle(lineWidth, strokeStyle, 1);
-        line.moveTo(line._ax, line._ay);
-        line.lineTo(line._bx, line._by);
+      var draw = function draw(strokeStyle, lineWidth, ax, ay, bx, by) {
+        o.clear();
+        o.lineStyle(lineWidth, strokeStyle, 1);
+        o.moveTo(ax, ay);
+        o.lineTo(bx, by);
       };
-      line.draw();
+
+      //Draw the line
+      draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
 
       //Define getters and setters that redefine the line's start and
       //end points and re-draws it if they change
-      Object.defineProperties(line, {
+      var self = this;
+      Object.defineProperties(o, {
         "ax": {
           get: function get() {
-            return this._ax;
+            return o._ax;
           },
           set: function set(value) {
-            this._ax = value;
-            this.draw();
+            o._ax = value;
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
           enumerable: true, configurable: true
         },
         "ay": {
           get: function get() {
-            return this._ay;
+            return o._ay;
           },
           set: function set(value) {
-            this._ay = value;
-            this.draw();
+            o._ay = value;
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
           enumerable: true, configurable: true
         },
         "bx": {
           get: function get() {
-            return this._bx;
+            return o._bx;
           },
           set: function set(value) {
-            this._bx = value;
-            this.draw();
+            o._bx = value;
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
           enumerable: true, configurable: true
         },
         "by": {
           get: function get() {
-            return this._by;
+            return o._by;
           },
           set: function set(value) {
-            this._by = value;
-            this.draw();
+            o._by = value;
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          },
+          enumerable: true, configurable: true
+        },
+        "strokeStyle": {
+          get: function get() {
+            return o._strokeStyle;
+          },
+          set: function set(value) {
+            o._strokeStyle = self.color(value);
+
+            //Draw the line
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          },
+          enumerable: true, configurable: true
+        },
+        "width": {
+          get: function get() {
+            return o._width;
+          },
+          set: function set(value) {
+            o._width = value;
+
+            //Draw the line
+            draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
           enumerable: true, configurable: true
         }
       });
 
       //Return the line
-      return line;
+      return o;
     }
   }, {
     key: "grid",
@@ -725,6 +905,98 @@ var SpriteUtilities = (function () {
           }
         }
       }
+    }
+  }, {
+    key: "colorToRGBA",
+
+    /* Color conversion */
+    //From: http://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes
+    //Utilities to convert HTML color string names to hexadecimal codes
+
+    value: function colorToRGBA(color) {
+      // Returns the color as an array of [r, g, b, a] -- all range from 0 - 255
+      // color must be a valid canvas fillStyle. This will cover most anything
+      // you'd want to use.
+      // Examples:
+      // colorToRGBA('red')  # [255, 0, 0, 255]
+      // colorToRGBA('#f00') # [255, 0, 0, 255]
+      var cvs, ctx;
+      cvs = document.createElement("canvas");
+      cvs.height = 1;
+      cvs.width = 1;
+      ctx = cvs.getContext("2d");
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, 1, 1);
+      var data = ctx.getImageData(0, 0, 1, 1).data;
+      return data;
+    }
+  }, {
+    key: "byteToHex",
+    value: function byteToHex(num) {
+      // Turns a number (0-255) into a 2-character hex number (00-ff)
+      return ("0" + num.toString(16)).slice(-2);
+    }
+  }, {
+    key: "colorToHex",
+    value: function colorToHex(color) {
+      var _this2 = this;
+
+      // Convert any CSS color to a hex representation
+      // Examples:
+      // colorToHex('red')            # '#ff0000'
+      // colorToHex('rgb(255, 0, 0)') # '#ff0000'
+      var rgba, hex;
+      rgba = this.colorToRGBA(color);
+      hex = [0, 1, 2].map(function (idx) {
+        return _this2.byteToHex(rgba[idx]);
+      }).join("");
+      return "0x" + hex;
+    }
+  }, {
+    key: "color",
+
+    //A function to find out if the user entered a number (a hex color
+    //code) or a string (an HTML color string)
+    value: function color(value) {
+
+      //Check if it's a number
+      if (!isNaN(value)) {
+        console.log("It's a number");
+
+        //Yes, it is a number, so just return it
+        return value;
+      }
+
+      //No it's not a number, so it must be a string   
+      else {
+
+        return this.colorToHex(value);
+        /*
+         //Find out what kind of color string it is.
+        //Let's first grab the first character of the string
+        let firstCharacter = value.charAt(0);
+         //If the first character is a "#" or a number, then
+        //we know it must be a RGBA color
+        if (firstCharacter === "#") {
+          console.log("first character: " + value.charAt(0))
+        }
+        */
+      }
+
+      /*
+      //Find out if the first character in the string is a number
+      if (!isNaN(parseInt(string.charAt(0)))) {
+        
+        //It's not, so convert it to a hex code
+        return colorToHex(string);
+        
+      //The use input a number, so it must be a hex code. Just return it
+      } else {
+      
+        return string;
+      }
+      
+      */
     }
   }]);
 

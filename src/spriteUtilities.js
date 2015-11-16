@@ -238,6 +238,59 @@ class SpriteUtilities{
     sprite.playAnimation = playAnimation;
   }
 
+  //`tilingSpirte` lets you quickly create Pixi tiling sprites
+  tilingSprite(source, width, height, x, y) {
+    if (width === undefined) {
+      throw new Error("Please define a width as your second argument for the tiling sprite");
+    }
+    if (height === undefined) {
+      throw new Error("Please define a height as your third argument for the tiling sprite");
+    }
+    let o = this.sprite(source, x, y, true, width, height);
+
+    //Add `tileX`, `tileY`, `tileScaleX` and `tileScaleY` properties
+    Object.defineProperties(o, {
+      "tileX": {
+        get() {
+          return o.tilePosition.x;
+        },
+        set(value) {
+          o.tilePosition.x = value;
+        }, 
+        enumerable: true, configurable: true
+      },
+      "tileY": {
+        get() {
+          return o.tilePosition.y;
+        },
+        set(value) {
+          o.tilePosition.y = value;
+        }, 
+        enumerable: true, configurable: true
+      },
+      "tileScaleX": {
+        get() {
+          return o.tileScale.x;
+        },
+        set(value) {
+          o.tileScale.x = value;
+        }, 
+        enumerable: true, configurable: true
+      },
+      "tileScaleY": {
+        get() {
+          return o.tileScale.y;
+        },
+        set(value) {
+          o.tileScale.y = value;
+        }, 
+        enumerable: true, configurable: true
+      },
+    });
+    
+    return o
+  }
+
   filmstrip(
     texture,
     frameWidth,
@@ -277,7 +330,6 @@ class SpriteUtilities{
       //Add the x and y value of each frame to the `positions` array
       positions.push([x, y]);
     }
-    console.log(positions)
 
     //Return the frames
     return this.frames(texture, positions, frameWidth, frameHeight);
@@ -301,7 +353,7 @@ class SpriteUtilities{
       texture = new this.Texture(source);
     }
     if (!texture) {
-      console.log(`Please load the ${source} texture into the cache.`);
+      throw new Error(`Please load the ${source} texture into the cache.`);
     } else {
 
       //Make a rectangle the size of the sub-image
@@ -329,7 +381,7 @@ class SpriteUtilities{
       baseTexture = new this.Texture(source);
     }
     if (!baseTexture) {
-      console.log(`Please load the ${source} texture into the cache.`);
+      throw new Error(`Please load the ${source} texture into the cache.`);
     } else {
       let textures = coordinates.map((position) => {
         let x = position[0],
@@ -817,8 +869,8 @@ class SpriteUtilities{
 
   //Use the `batch` method to create a ParticleContainer
   batch(size = 15000, options = {rotation: true, alpha: true, scale: true, uvs: true}) {
-    let batch = new this.ParticleContainer(size, options);
-    return batch;
+    let o = new this.ParticleContainer(size, options);
+    return o;
   }
 
   //`remove` is a global convenience method that will
@@ -895,7 +947,6 @@ class SpriteUtilities{
 
     //Check if it's a number
     if(!isNaN(value)){
-      console.log("It's a number");
 
       //Yes, it is a number, so just return it
       return value;

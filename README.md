@@ -6,6 +6,7 @@ This repository contains a bunch of useful functions for creating
 
 [Setting up](#settingup) <br>
 [sprite: Quickly make any Sprite or MovieClip](#sprite)<br>
+[tilingSprite: Make a tiling sprite](#tilingSprite)<br>
 [filmstrip: Turn any tileset PNG into a texture array](#filmstrip)<br>
 [frames: Capture a subset of frames from a PNG tileset](#frames)<br>
 [frame: Capture a single rectangular area inside PNG image or tileset](#frame)<br>
@@ -81,6 +82,21 @@ current frame. `anySprite.stopAnimation()`.
 
 5. `animating`: A Boolean property that will be `true` if the
 animation is playing and `false` if it isn't.
+
+<a id="sprite"></a>
+`tilingSprite`
+-------------
+
+Create a sprite with an image that you can tile across its surface. The first argument is
+the source for the tile image. You can use ordinary images,
+texture atlas frames, or an array of image sources if you want to
+tiling sprite with multiple frames. The second and third arguments
+are the sprite's width and height, which determine the entire area that
+the tile pattern should fill. You can optionally supply the x and y
+position as the fourth and fifth arguments.
+```js
+let anySprite = u.tilingSprite("images/tile.png", 128, 128);
+```  
 
 <a id="filmstrip"></a>
 `filmstrip`
@@ -251,7 +267,7 @@ u.rectangle(
 They're the only two arguments that are required.
 `fillStyle` is color for the inside fill color of the
 rectangle, and `strokeStyle` is the color code for the outline. (You
-can use hex colors, RGBA colors, or even any HTML color names, like "blue" or "pink".)
+can use hex colors, RGBA colors, or even any [HTML color names](http://www.w3schools.com/html/html_colornames.asp), like "blue" or "pink".)
 `lineWidth` determines how thick, in pixels, the rectangle's outline
 should be. (The default value is 0, which means the rectangle will have
 no outline.) The last two values are the rectangle's x and y
@@ -444,7 +460,7 @@ Do you like Pixi, but don't like Hexadecimal color codes? Use
 let hexColor = u.color("darkSeaGreen");
 ```
 Now just use `hexColor` wherever Pixi asks for a color code. Yes, all
-of the HTML color string names are supported.
+of the [HTML color string names](http://www.w3schools.com/html/html_colornames.asp) are supported.
 
 
 

@@ -933,6 +933,66 @@ var SpriteUtilities = (function () {
       return container;
     }
 
+    //Use `shoot` to create bullet sprites
+
+  }, {
+    key: "shoot",
+    value: function shoot(shooter, angle, x, y, container, bulletSpeed, bulletArray, bulletSprite) {
+
+      //Make a new sprite using the user-supplied `bulletSprite` function
+      var bullet = bulletSprite();
+
+      //Set the bullet's anchor point to its center
+      bullet.anchor.set(0.5, 0.5);
+
+      //Temporarily add the bullet to the shooter
+      //so that we can position it relative to the
+      //shooter's position
+      shooter.addChild(bullet);
+      bullet.x = x;
+      bullet.y = y;
+
+      //Find the bullet's global coordinates so that we can use
+      //them to position the bullet on the new parent container
+      var tempGx = bullet.getGlobalPosition().x,
+          tempGy = bullet.getGlobalPosition().y;
+
+      //Add the bullet to the new parent container using
+      //the new global coordinates
+      container.addChild(bullet);
+      bullet.x = tempGx;
+      bullet.y = tempGy;
+
+      //Set the bullet's velocity
+      bullet.vx = Math.cos(angle) * bulletSpeed;
+      bullet.vy = Math.sin(angle) * bulletSpeed;
+
+      //Push the bullet into the `bulletArray`
+      bulletArray.push(bullet);
+    }
+
+    /*
+    _getCenter
+    ----------
+     A utility that finds the center point of the sprite. If it's anchor point is the
+    sprite's top left corner, then the center is calculated from that point.
+    If the anchor point has been shifted, then the anchor x/y point is used as the sprite's center
+    */
+
+  }, {
+    key: "_getCenter",
+    value: function _getCenter(o, dimension, axis) {
+      if (o.anchor !== undefined) {
+        if (o.anchor[axis] !== 0) {
+          return 0;
+        } else {
+          return dimension / 2;
+        }
+      } else {
+        return dimension;
+      }
+    }
+
     /* Groups */
 
     //Group sprites into a container
@@ -970,6 +1030,9 @@ var SpriteUtilities = (function () {
   }, {
     key: "remove",
     value: function remove() {
+      for (var _len2 = arguments.length, sprites = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        sprites[_key2] = arguments[_key2];
+      }
 
       //Remove sprites that's aren't in an array
       if (!(sprites[0] instanceof Array)) {

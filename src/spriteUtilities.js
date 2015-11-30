@@ -19,6 +19,18 @@ class SpriteUtilities{
       this.TilingSprite = renderingEngine.extras.TilingSprite;
       this.Graphics = renderingEngine.Graphics;
       this.Text = renderingEngine.Text;
+      
+      //An array to store all the shaking sprites
+      this.shakingSprites = [];
+    }
+  }
+
+  update() {
+    if (this.shakingSprites.length > 0) {
+      for(let i = this.shakingSprites.length - 1; i >= 0; i--) {
+        let shakingSprite = this.shakingSprites[i];
+        if (shakingSprite.updateShake) shakingSprite.updateShake();
+      } 
     }
   }
 
@@ -54,7 +66,7 @@ class SpriteUtilities{
       }
       //But if the source still can't be found, alert the user
       else {
-        console.log(`${source} cannot be found`);
+        throw new Error(`${source} cannot be found`);
       }
     }
 
@@ -890,6 +902,213 @@ class SpriteUtilities{
 
     //Push the bullet into the `bulletArray`
     bulletArray.push(bullet);
+  }
+
+  /*
+  grid
+  ----
+
+  Helps you to automatically create a grid of sprites. `grid` returns a
+  `group` sprite object that contains a sprite for every cell in the
+  grid. You can define the rows and columns in the grid, whether or
+  not the sprites should be centered inside each cell, or what their offset from the
+  top left corner of each cell should be. Supply a function that
+  returns the sprite that you want to make for each cell. You can
+  supply an optional final function that runs any extra code after
+  each sprite has been created. Here's the format for creating a grid:
+
+      gridGroup = grid(
+
+        //Set the grid's properties
+        columns, rows, cellWidth, cellHeight,
+        areSpirtesCentered?, xOffset, yOffset,
+
+        //A function that returns a sprite
+        () => g.circle(16, "blue"),
+
+        //An optional final function that runs some extra code
+        () => console.log("extra!")
+      );
+  */
+
+  grid(
+    columns = 0, rows = 0, cellWidth = 32, cellHeight = 32,
+    centerCell = false, xOffset = 0, yOffset = 0,
+    makeSprite = undefined,
+    extra = undefined
+  ){
+
+    //Create an empty group called `container`. This `container`
+    //group is what the function returns back to the main program.
+    //All the sprites in the grid cells will be added
+    //as children to this container
+    let container = this.group();
+
+    //The `create` method plots the grid
+    let createGrid = () => {
+
+      //Figure out the number of cells in the grid
+      let length = columns * rows;
+
+      //Create a sprite for each cell
+      for(let i = 0; i < length; i++) {
+
+        //Figure out the sprite's x/y placement in the grid
+        let x = (i % columns) * cellWidth,
+            y = Math.floor(i / columns) * cellHeight;
+
+        //Use the `makeSprite` function supplied in the constructor
+        //to make a sprite for the grid cell
+        let sprite = makeSprite();
+
+        //Add the sprite to the `container`
+        container.addChild(sprite);
+
+        //Should the sprite be centered in the cell?
+
+        //No, it shouldn't be centered
+        if (!centerCell) {
+          sprite.x = x + xOffset;
+          sprite.y = y + yOffset;
+        }
+
+        //Yes, it should be centered
+        else {
+          sprite.x 
+            = x + (cellWidth / 2) 
+            - sprite.halfWidth + xOffset;
+          sprite.y 
+            = y + (cellHeight / 2) 
+            - sprite.halfHeight + yOffset;
+        }
+
+        //Run any optional extra code. This calls the
+        //`extra` function supplied by the constructor
+        if (extra) extra(sprite);
+      }
+    };
+
+    //Run the `createGrid` method
+    createGrid();
+
+    //Return the `container` group back to the main program
+    return container;
+  }
+
+  /*
+  shake
+  -----
+
+  Used to create a shaking effect, like a screen shake
+  */
+
+  shake(sprite, magnitude = 16, angular = false) {
+
+    //Get a reference to this current object so that
+    //it's easy to maintain scope in the nested sub-functions
+    let self = this;
+
+    //A counter to count the number of shakes
+    let counter = 1;
+
+    //The total number of shakes (there will be 1 shake per frame)
+    let numberOfShakes = 10;
+
+    //Capture the sprite's position and angle so you can
+    //restore them after the shaking has finished
+    let startX = sprite.x,
+        startY = sprite.y,
+        startAngle = sprite.rotation;
+
+    //Divide the magnitude into 10 units so that you can 
+    //reduce the amount of shake by 10 percent each frame
+    let magnitudeUnit = magnitude / numberOfShakes;
+    
+    //The `randomInt` helper function
+    let randomInt = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    
+    //Add the sprite to the `shakingSprites` array if it
+    //isn't already there
+    if(self.shakingSprites.indexOf(sprite) === -1) {
+
+      self.shakingSprites.push(sprite);
+      
+      //Add an `updateShake` method to the sprite.
+      //The `updateShake` method will be called each frame
+      //in the game loop. The shake effect type can be either
+      //up and down (x/y shaking) or angular (rotational shaking).
+      sprite.updateShake = () => {
+        if(angular) {
+          angularShake();
+        } else {
+          upAndDownShake();
+        }
+      };
+    }
+
+    //The `upAndDownShake` function
+    function upAndDownShake() {
+
+      //Shake the sprite while the `counter` is less than 
+      //the `numberOfShakes`
+      if (counter < numberOfShakes) {
+
+        //Reset the sprite's position at the start of each shake
+        sprite.x = startX;
+        sprite.y = startY;
+
+        //Reduce the magnitude
+        magnitude -= magnitudeUnit;
+
+        //Randomly change the sprite's position
+        sprite.x += randomInt(-magnitude, magnitude);
+        sprite.y += randomInt(-magnitude, magnitude);
+
+        //Add 1 to the counter
+        counter += 1;
+      }
+
+      //When the shaking is finished, restore the sprite to its original 
+      //position and remove it from the `shakingSprites` array
+      if (counter >= numberOfShakes) {
+        sprite.x = startX;
+        sprite.y = startY;
+        self.shakingSprites.splice(self.shakingSprites.indexOf(sprite), 1);
+      }
+    }
+    
+    //The `angularShake` function
+    //First set the initial tilt angle to the right (+1) 
+    let tiltAngle = 1;
+
+    function angularShake() {
+      if (counter < numberOfShakes) {
+
+        //Reset the sprite's rotation
+        sprite.rotation = startAngle;
+
+        //Reduce the magnitude
+        magnitude -= magnitudeUnit;
+
+        //Rotate the sprite left or right, depending on the direction,
+        //by an amount in radians that matches the magnitude
+        sprite.rotation = magnitude * tiltAngle;
+        counter += 1;
+
+        //Reverse the tilt angle so that the sprite is tilted
+        //in the opposite direction for the next shake
+        tiltAngle *= -1;
+      }
+
+      //When the shaking is finished, reset the sprite's angle and
+      //remove it from the `shakingSprites` array
+      if (counter >= numberOfShakes) {
+        sprite.rotation = startAngle;
+        self.shakingSprites.splice(self.shakingSprites.indexOf(sprite), 1);
+      }
+    }
   }
 
   /*

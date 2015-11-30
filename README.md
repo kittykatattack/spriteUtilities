@@ -19,6 +19,8 @@ This repository contains a bunch of useful functions for creating
 [grid: Create a grid of sprites](#grid)<br>
 [group: Group sprites](#group)<br>
 [batch: Create a particle container](#batch)<br>
+[shoot: A method for easily shooting bullet sprites](#shoot)<br>
+[shake: Make a sprite shake](#shake)<br>
 [remove: Remove a sprite or array of sprites from its parent](#batch)<br>
 [color: Convert a HTML or RGBA color to a Hex color code](#color)<br>
 
@@ -430,6 +432,102 @@ set it to a higher number. The `options` argument is an object with
 five Boolean properties that you can set: `scale`, `position`,
 `rotation`, `alpha`, and `uvs`. The default value for position is `true`, but all
 the others are set to `false`. 
+
+<a id="shoot"></a>
+`shoot` 
+-------
+
+The `shoot` methods let you create bullet sprites at any position on
+another sprite.
+
+The first step to making bullets is to create an array to store the
+new bullet sprites that you’re going to make:
+```js
+let bullets = [];
+```
+You also need a sprite that's going to do the shooting.
+```js
+let tank = u.sprite("tank.png");
+```
+If you want your tank sprite to rotate around its center, then 
+you'll want to center its x/y anchor point, like this:
+```js
+tank.anchor.set(0.5, 0,5);
+```
+Next, use the `shoot` method to create bullet sprites.
+```js
+u.shoot(
+  tank,           //The sprite that will be shooting
+  tank.rotation,  //The angle at which to shoot
+  32,             //The x point on the tank where the bullet should start
+  0,              //The y point on the tank where the bullet should start
+  stage,          //The container you want to add the bullet to
+  7,              //The bullet's speed (pixels per frame)
+  bullets,        //The array used to store the bullets
+
+  //A function that returns the sprite that should
+  //be used to make each bullet
+  () => g.circle(8, "red")
+);
+
+```
+The 3rd and 4th arguments are the local x and y points on the tank
+where you want the bullets to start from. The 5th argument is the Pixi
+container that you want to add the bullets to. The 7th argument is the
+array that you want to add each bullet to.
+
+The most important argument is the last one:
+```js
+() => u.circle(8, "red")
+```
+That’s a function that creates and returns the kind of sprite you want 
+to use as a bullet. In this case, it’s a red circle 8 pixels in diameter. 
+You can use any of the sprite-creation methods from this Sprite Utilities library,
+any standard Pixi sprite creation methods, or use your own custom function that
+creates and returns a sprite.
+
+All the bullet sprites that the `shoot` method creates are added to
+the `bullets` array, so just loop though the sprites in that array to
+check for collisions with other sprites.
+
+<a id="shake"></a>
+`shake` 
+-------
+
+Use the `shake` method to make a sprite shake or create a screen-shake
+effect. Here's how to use it:
+```js
+u.shake(spriteToShake, magnitude, angular?);
+```
+The `shake` method’s first argument is the sprite, and the second is the shake 
+magnitude in radians. The third argument is a Boolean that when `true` means 
+the shaking should be angular around the sprite’s center point. 
+
+Here's how you could make a sprite called `screen` shake around its center with a
+magnitude of 0.05.
+```js
+u.shake(gameScene, 0.05, true);
+```
+You can alternatively make the shaking happen up and down on the x/y plane.
+Just set the second argument to a number, in pixels, that determines the 
+maximum amount by which the sprite should shake. Then set the third 
+argument to `false`, to disable angular shaking. 
+```js
+shake(gameScene, 16, false);
+```
+Which shaking style you prefer is entirely up to you.
+
+`shake` is an animation effect, and you won't see it unless run the
+SpriteUtilities `update` method inside a game loop. Here's how:
+```js
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+
+  //Update the SpriteUtilities library each frame
+  u.update();
+}
+```
+The `update` method takes care animating the shake effect for you.
 
 <a id="remove"></a>
 `remove` 

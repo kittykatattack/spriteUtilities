@@ -23,7 +23,7 @@ var SpriteUtilities = (function () {
       this.TextureCache = renderingEngine.utils.TextureCache;
       this.Texture = renderingEngine.Texture;
       this.Rectangle = renderingEngine.Rectangle;
-      this.MovieClip = renderingEngine.extras.MovieClip;
+      this.AnimatedSprite = renderingEngine.extras.AnimatedSprite;
       this.BitmapText = renderingEngine.extras.BitmapText;
       this.Sprite = renderingEngine.Sprite;
       this.TilingSprite = renderingEngine.extras.TilingSprite;
@@ -98,7 +98,7 @@ var SpriteUtilities = (function () {
           }
         }
 
-        //Create a `MovieClip` o if the `source` is an array
+        //Create a `AnimatedSprite` o if the `source` is an array
         else if (source instanceof Array) {
 
             //Is it an array of frame ids or textures?
@@ -111,11 +111,11 @@ var SpriteUtilities = (function () {
               if (this.TextureCache[source[0]]) {
 
                 //It does, so it's an array of frame ids
-                o = this.MovieClip.fromFrames(source);
+                o = this.AnimatedSprite.fromFrames(source);
               } else {
 
                 //It's not already in the cache, so let's load it
-                o = this.MovieClip.fromImages(source);
+                o = this.AnimatedSprite.fromImages(source);
               }
             }
 
@@ -124,8 +124,8 @@ var SpriteUtilities = (function () {
             else if (source[0] instanceof this.Texture) {
 
                 //Yes, it's an array of textures.
-                //Use them to make a MovieClip o
-                o = new this.MovieClip(source);
+                //Use them to make a AnimatedSprite o
+                o = new this.AnimatedSprite(source);
               }
           }
 
@@ -140,9 +140,9 @@ var SpriteUtilities = (function () {
         if (width) o.width = width;
         if (height) o.height = height;
 
-        //If the sprite is a MovieClip, add a state player so that
+        //If the sprite is a AnimatedSprite, add a state player so that
         //it's easier to control
-        if (o instanceof this.MovieClip) this.addStatePlayer(o);
+        if (o instanceof this.AnimatedSprite) this.addStatePlayer(o);
 
         //Assign the sprite
         return o;
@@ -293,7 +293,8 @@ var SpriteUtilities = (function () {
             o.tilePosition.x = value;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "tileY": {
           get: function get() {
@@ -303,7 +304,8 @@ var SpriteUtilities = (function () {
             o.tilePosition.y = value;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "tileScaleX": {
           get: function get() {
@@ -313,7 +315,8 @@ var SpriteUtilities = (function () {
             o.tileScale.x = value;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "tileScaleY": {
           get: function get() {
@@ -323,7 +326,8 @@ var SpriteUtilities = (function () {
             o.tileScale.y = value;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         }
       });
 
@@ -471,7 +475,10 @@ var SpriteUtilities = (function () {
       var y = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
 
       //Create a Pixi Sprite object
-      var message = new this.Text(content, { font: font, fill: fillStyle });
+      var message = new this.Text(content, {
+        font: font,
+        fill: fillStyle
+      });
       message.x = x;
       message.y = y;
 
@@ -486,7 +493,8 @@ var SpriteUtilities = (function () {
           this.text = value;
         },
 
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
       });
 
       //Return the text object
@@ -506,7 +514,11 @@ var SpriteUtilities = (function () {
       var y = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
 
       //Create a Pixi Sprite object
-      var message = new this.BitmapText(content, { font: font, align: align, tint: tint });
+      var message = new this.BitmapText(content, {
+        font: font,
+        align: align,
+        tint: tint
+      });
       message.x = x;
       message.y = y;
 
@@ -521,7 +533,8 @@ var SpriteUtilities = (function () {
           this.text = value;
         },
 
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
       });
 
       //Return the text object
@@ -567,7 +580,7 @@ var SpriteUtilities = (function () {
       draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
 
       //Generate a texture from the rectangle
-      var texture = o.generateTexture();
+      var texture = renderingEngine.renderer.generateTexture(o);
 
       //Use the texture to create a sprite
       var sprite = new this.Sprite(texture);
@@ -590,11 +603,12 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "strokeStyle": {
           get: function get() {
@@ -607,11 +621,12 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "lineWidth": {
           get: function get() {
@@ -624,11 +639,12 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         }
       });
 
@@ -673,7 +689,7 @@ var SpriteUtilities = (function () {
       draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
       //Generate a texture from the rectangle
-      var texture = o.generateTexture();
+      var texture = renderingEngine.renderer.generateTexture(o);
 
       //Use the texture to create a sprite
       var sprite = new this.Sprite(texture);
@@ -696,11 +712,12 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "strokeStyle": {
           get: function get() {
@@ -713,11 +730,12 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "diameter": {
           get: function get() {
@@ -730,11 +748,12 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "radius": {
           get: function get() {
@@ -746,11 +765,12 @@ var SpriteUtilities = (function () {
             draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = o.generateTexture();
+            var texture = renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         }
       });
       //Get a local reference to the sprite so that we can
@@ -808,7 +828,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "ay": {
           get: function get() {
@@ -819,7 +840,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "bx": {
           get: function get() {
@@ -830,7 +852,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "by": {
           get: function get() {
@@ -841,7 +864,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "strokeStyle": {
           get: function get() {
@@ -854,7 +878,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         },
         "width": {
           get: function get() {
@@ -867,7 +892,8 @@ var SpriteUtilities = (function () {
             draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
           },
 
-          enumerable: true, configurable: true
+          enumerable: true,
+          configurable: true
         }
       });
 
@@ -1238,7 +1264,12 @@ var SpriteUtilities = (function () {
     key: "batch",
     value: function batch() {
       var size = arguments.length <= 0 || arguments[0] === undefined ? 15000 : arguments[0];
-      var options = arguments.length <= 1 || arguments[1] === undefined ? { rotation: true, alpha: true, scale: true, uvs: true } : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {
+        rotation: true,
+        alpha: true,
+        scale: true,
+        uvs: true
+      } : arguments[1];
 
       var o = new this.ParticleContainer(size, options);
       return o;

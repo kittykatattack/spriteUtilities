@@ -1,6 +1,6 @@
-class SpriteUtilities{
+class SpriteUtilities {
   constructor(renderingEngine = PIXI) {
-    if (renderingEngine === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js"); 
+    if (renderingEngine === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js");
 
     //Find out which rendering engine is being used (the default is Pixi)
     this.renderer = "";
@@ -13,13 +13,13 @@ class SpriteUtilities{
       this.TextureCache = renderingEngine.utils.TextureCache;
       this.Texture = renderingEngine.Texture;
       this.Rectangle = renderingEngine.Rectangle;
-      this.MovieClip = renderingEngine.extras.MovieClip;
+      this.AnimatedSprite = renderingEngine.extras.AnimatedSprite;
       this.BitmapText = renderingEngine.extras.BitmapText;
       this.Sprite = renderingEngine.Sprite;
       this.TilingSprite = renderingEngine.extras.TilingSprite;
       this.Graphics = renderingEngine.Graphics;
       this.Text = renderingEngine.Text;
-      
+
       //An array to store all the shaking sprites
       this.shakingSprites = [];
     }
@@ -27,10 +27,10 @@ class SpriteUtilities{
 
   update() {
     if (this.shakingSprites.length > 0) {
-      for(let i = this.shakingSprites.length - 1; i >= 0; i--) {
+      for (let i = this.shakingSprites.length - 1; i >= 0; i--) {
         let shakingSprite = this.shakingSprites[i];
         if (shakingSprite.updateShake) shakingSprite.updateShake();
-      } 
+      }
     }
   }
 
@@ -79,7 +79,7 @@ class SpriteUtilities{
       }
     }
 
-    //Create a `MovieClip` o if the `source` is an array
+    //Create a `AnimatedSprite` o if the `source` is an array
     else if (source instanceof Array) {
 
       //Is it an array of frame ids or textures?
@@ -92,11 +92,11 @@ class SpriteUtilities{
         if (this.TextureCache[source[0]]) {
 
           //It does, so it's an array of frame ids
-          o = this.MovieClip.fromFrames(source);
+          o = this.AnimatedSprite.fromFrames(source);
         } else {
 
           //It's not already in the cache, so let's load it
-          o = this.MovieClip.fromImages(source);
+          o = this.AnimatedSprite.fromImages(source);
         }
       }
 
@@ -105,8 +105,8 @@ class SpriteUtilities{
       else if (source[0] instanceof this.Texture) {
 
         //Yes, it's an array of textures. 
-        //Use them to make a MovieClip o 
-        o = new this.MovieClip(source);
+        //Use them to make a AnimatedSprite o 
+        o = new this.AnimatedSprite(source);
       }
     }
 
@@ -121,9 +121,9 @@ class SpriteUtilities{
       if (width) o.width = width;
       if (height) o.height = height;
 
-      //If the sprite is a MovieClip, add a state player so that
+      //If the sprite is a AnimatedSprite, add a state player so that
       //it's easier to control
-      if (o instanceof this.MovieClip) this.addStatePlayer(o);
+      if (o instanceof this.AnimatedSprite) this.addStatePlayer(o);
 
       //Assign the sprite
       return o;
@@ -268,8 +268,9 @@ class SpriteUtilities{
         },
         set(value) {
           o.tilePosition.x = value;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "tileY": {
         get() {
@@ -277,8 +278,9 @@ class SpriteUtilities{
         },
         set(value) {
           o.tilePosition.y = value;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "tileScaleX": {
         get() {
@@ -286,8 +288,9 @@ class SpriteUtilities{
         },
         set(value) {
           o.tileScale.x = value;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "tileScaleY": {
         get() {
@@ -295,11 +298,12 @@ class SpriteUtilities{
         },
         set(value) {
           o.tileScale.y = value;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
     });
-    
+
     return o
   }
 
@@ -425,7 +429,10 @@ class SpriteUtilities{
   text(content = "message", font = "16px sans", fillStyle = "red", x = 0, y = 0) {
 
     //Create a Pixi Sprite object
-    let message = new this.Text(content, {font: font, fill: fillStyle});
+    let message = new this.Text(content, {
+      font: font,
+      fill: fillStyle
+    });
     message.x = x;
     message.y = y;
 
@@ -439,7 +446,8 @@ class SpriteUtilities{
         this._content = value;
         this.text = value;
       },
-      enumerable: true, configurable: true
+      enumerable: true,
+      configurable: true
     });
 
     //Return the text object
@@ -450,7 +458,11 @@ class SpriteUtilities{
   bitmapText(content = "message", font, align, tint, x = 0, y = 0) {
 
     //Create a Pixi Sprite object
-    let message = new this.BitmapText(content, {font: font, align: align, tint: tint});
+    let message = new this.BitmapText(content, {
+      font: font,
+      align: align,
+      tint: tint
+    });
     message.x = x;
     message.y = y;
 
@@ -464,7 +476,8 @@ class SpriteUtilities{
         this._content = value;
         this.text = value;
       },
-      enumerable: true, configurable: true
+      enumerable: true,
+      configurable: true
     });
 
     //Return the text object
@@ -475,14 +488,14 @@ class SpriteUtilities{
 
   //Rectangle
   rectangle(
-      width = 32, 
-      height = 32,  
-      fillStyle = 0xFF3300, 
-      strokeStyle = 0x0033CC, 
-      lineWidth = 0,
-      x = 0, 
-      y = 0 
-    ){
+    width = 32,
+    height = 32,
+    fillStyle = 0xFF3300,
+    strokeStyle = 0x0033CC,
+    lineWidth = 0,
+    x = 0,
+    y = 0
+  ) {
 
     let o = new this.Graphics();
     o._sprite = undefined;
@@ -508,7 +521,7 @@ class SpriteUtilities{
     draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
 
     //Generate a texture from the rectangle
-    let texture = o.generateTexture();
+    let texture = renderingEngine.renderer.generateTexture(o);
 
     //Use the texture to create a sprite
     let sprite = new this.Sprite(texture);
@@ -531,10 +544,11 @@ class SpriteUtilities{
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "strokeStyle": {
         get() {
@@ -547,10 +561,11 @@ class SpriteUtilities{
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "lineWidth": {
         get() {
@@ -563,13 +578,14 @@ class SpriteUtilities{
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       }
     });
-    
+
     //Get a local reference to the sprite so that we can 
     //change the rectangle properties later using the getters/setters
     o._sprite = sprite;
@@ -580,13 +596,13 @@ class SpriteUtilities{
 
   //Circle
   circle(
-      diameter = 32, 
-      fillStyle = 0xFF3300, 
-      strokeStyle = 0x0033CC, 
-      lineWidth = 0,
-      x = 0, 
-      y = 0 
-    ){
+    diameter = 32,
+    fillStyle = 0xFF3300,
+    strokeStyle = 0x0033CC,
+    lineWidth = 0,
+    x = 0,
+    y = 0
+  ) {
 
     let o = new this.Graphics();
     o._diameter = diameter;
@@ -596,7 +612,7 @@ class SpriteUtilities{
 
     //Draw the circle
     let draw = (diameter, fillStyle, strokeStyle, lineWidth) => {
-      o.clear(); 
+      o.clear();
       o.beginFill(fillStyle);
       if (lineWidth > 0) {
         o.lineStyle(lineWidth, strokeStyle, 1);
@@ -609,7 +625,7 @@ class SpriteUtilities{
     draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
     //Generate a texture from the rectangle
-    let texture = o.generateTexture();
+    let texture = renderingEngine.renderer.generateTexture(o);
 
     //Use the texture to create a sprite
     let sprite = new this.Sprite(texture);
@@ -632,10 +648,11 @@ class SpriteUtilities{
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "strokeStyle": {
         get() {
@@ -648,10 +665,11 @@ class SpriteUtilities{
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "diameter": {
         get() {
@@ -664,10 +682,11 @@ class SpriteUtilities{
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "radius": {
         get() {
@@ -679,10 +698,11 @@ class SpriteUtilities{
           draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
     });
     //Get a local reference to the sprite so that we can 
@@ -695,13 +715,13 @@ class SpriteUtilities{
 
   //Line
   line(
-      strokeStyle = 0x000000, 
-      lineWidth = 1, 
-      ax = 0, 
-      ay = 0, 
-      bx = 32, 
-      by = 32
-    ){
+    strokeStyle = 0x000000,
+    lineWidth = 1,
+    ax = 0,
+    ay = 0,
+    bx = 32,
+    by = 32
+  ) {
 
     //Create the line object
     let o = new this.Graphics();
@@ -721,7 +741,7 @@ class SpriteUtilities{
       o.moveTo(ax, ay);
       o.lineTo(bx, by);
     };
-    
+
     //Draw the line
     draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
 
@@ -736,8 +756,9 @@ class SpriteUtilities{
         set(value) {
           o._ax = value;
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "ay": {
         get() {
@@ -746,8 +767,9 @@ class SpriteUtilities{
         set(value) {
           o._ay = value;
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "bx": {
         get() {
@@ -756,8 +778,9 @@ class SpriteUtilities{
         set(value) {
           o._bx = value;
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "by": {
         get() {
@@ -766,8 +789,9 @@ class SpriteUtilities{
         set(value) {
           o._by = value;
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "strokeStyle": {
         get() {
@@ -778,8 +802,9 @@ class SpriteUtilities{
 
           //Draw the line
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       },
       "width": {
         get() {
@@ -790,8 +815,9 @@ class SpriteUtilities{
 
           //Draw the line
           draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
-        }, 
-        enumerable: true, configurable: true
+        },
+        enumerable: true,
+        configurable: true
       }
     });
 
@@ -807,7 +833,7 @@ class SpriteUtilities{
     centerCell = false, xOffset = 0, yOffset = 0,
     makeSprite = undefined,
     extra = undefined
-  ){
+  ) {
 
     //Create an empty group called `container`. This `container`
     //group is what the function returns back to the main program.
@@ -823,11 +849,11 @@ class SpriteUtilities{
       let length = columns * rows;
 
       //Create a sprite for each cell
-      for(let i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
 
         //Figure out the sprite's x/y placement in the grid
         let x = (i % columns) * cellWidth,
-            y = Math.floor(i / columns) * cellHeight;
+          y = Math.floor(i / columns) * cellHeight;
 
         //Use the `makeSprite` function supplied in the constructor
         //to make a sprite for the grid cell
@@ -846,12 +872,10 @@ class SpriteUtilities{
 
         //Yes, it should be centered
         else {
-          sprite.x 
-            = x + (cellWidth / 2) 
-            - (sprite.width / 2) + xOffset;
-          sprite.y 
-            = y + (cellHeight / 2) 
-            - (sprite.width / 2) + yOffset;
+          sprite.x = x + (cellWidth / 2) -
+            (sprite.width / 2) + xOffset;
+          sprite.y = y + (cellHeight / 2) -
+            (sprite.width / 2) + yOffset;
         }
 
         //Run any optional extra code. This calls the
@@ -888,7 +912,7 @@ class SpriteUtilities{
     //Find the bullet's global coordinates so that we can use
     //them to position the bullet on the new parent container
     let tempGx = bullet.getGlobalPosition().x,
-        tempGy = bullet.getGlobalPosition().y;
+      tempGy = bullet.getGlobalPosition().y;
 
     //Add the bullet to the new parent container using
     //the new global coordinates
@@ -936,7 +960,7 @@ class SpriteUtilities{
     centerCell = false, xOffset = 0, yOffset = 0,
     makeSprite = undefined,
     extra = undefined
-  ){
+  ) {
 
     //Create an empty group called `container`. This `container`
     //group is what the function returns back to the main program.
@@ -951,11 +975,11 @@ class SpriteUtilities{
       let length = columns * rows;
 
       //Create a sprite for each cell
-      for(let i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
 
         //Figure out the sprite's x/y placement in the grid
         let x = (i % columns) * cellWidth,
-            y = Math.floor(i / columns) * cellHeight;
+          y = Math.floor(i / columns) * cellHeight;
 
         //Use the `makeSprite` function supplied in the constructor
         //to make a sprite for the grid cell
@@ -974,12 +998,10 @@ class SpriteUtilities{
 
         //Yes, it should be centered
         else {
-          sprite.x 
-            = x + (cellWidth / 2) 
-            - sprite.halfWidth + xOffset;
-          sprite.y 
-            = y + (cellHeight / 2) 
-            - sprite.halfHeight + yOffset;
+          sprite.x = x + (cellWidth / 2) -
+            sprite.halfWidth + xOffset;
+          sprite.y = y + (cellHeight / 2) -
+            sprite.halfHeight + yOffset;
         }
 
         //Run any optional extra code. This calls the
@@ -1017,30 +1039,30 @@ class SpriteUtilities{
     //Capture the sprite's position and angle so you can
     //restore them after the shaking has finished
     let startX = sprite.x,
-        startY = sprite.y,
-        startAngle = sprite.rotation;
+      startY = sprite.y,
+      startAngle = sprite.rotation;
 
     //Divide the magnitude into 10 units so that you can 
     //reduce the amount of shake by 10 percent each frame
     let magnitudeUnit = magnitude / numberOfShakes;
-    
+
     //The `randomInt` helper function
     let randomInt = (min, max) => {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
-    
+
     //Add the sprite to the `shakingSprites` array if it
     //isn't already there
-    if(self.shakingSprites.indexOf(sprite) === -1) {
+    if (self.shakingSprites.indexOf(sprite) === -1) {
 
       self.shakingSprites.push(sprite);
-      
+
       //Add an `updateShake` method to the sprite.
       //The `updateShake` method will be called each frame
       //in the game loop. The shake effect type can be either
       //up and down (x/y shaking) or angular (rotational shaking).
       sprite.updateShake = () => {
-        if(angular) {
+        if (angular) {
           angularShake();
         } else {
           upAndDownShake();
@@ -1078,7 +1100,7 @@ class SpriteUtilities{
         self.shakingSprites.splice(self.shakingSprites.indexOf(sprite), 1);
       }
     }
-    
+
     //The `angularShake` function
     //First set the initial tilt angle to the right (+1) 
     let tiltAngle = 1;
@@ -1128,10 +1150,10 @@ class SpriteUtilities{
         return dimension / 2;
       }
     } else {
-      return dimension; 
+      return dimension;
     }
   }
-  
+
 
 
   /* Groups */
@@ -1146,7 +1168,12 @@ class SpriteUtilities{
   }
 
   //Use the `batch` method to create a ParticleContainer
-  batch(size = 15000, options = {rotation: true, alpha: true, scale: true, uvs: true}) {
+  batch(size = 15000, options = {
+    rotation: true,
+    alpha: true,
+    scale: true,
+    uvs: true
+  }) {
     let o = new this.ParticleContainer(size, options);
     return o;
   }
@@ -1158,7 +1185,7 @@ class SpriteUtilities{
     //Remove sprites that's aren't in an array
     if (!(sprites[0] instanceof Array)) {
       if (sprites.length > 1) {
-        sprites.forEach(sprite  => {
+        sprites.forEach(sprite => {
           sprite.parent.removeChild(sprite);
         });
       } else {
@@ -1197,13 +1224,13 @@ class SpriteUtilities{
     ctx = cvs.getContext('2d');
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, 1, 1);
-    let data = ctx.getImageData(0, 0, 1, 1).data; 
+    let data = ctx.getImageData(0, 0, 1, 1).data;
     return data;
   }
 
   byteToHex(num) {
     // Turns a number (0-255) into a 2-character hex number (00-ff)
-    return ('0'+num.toString(16)).slice(-2);
+    return ('0' + num.toString(16)).slice(-2);
   }
 
   colorToHex(color) {
@@ -1213,9 +1240,9 @@ class SpriteUtilities{
     // colorToHex('rgb(255, 0, 0)') # '#ff0000'
     var rgba, hex;
     rgba = this.colorToRGBA(color);
-    hex = [0,1,2].map(
+    hex = [0, 1, 2].map(
       idx => this.byteToHex(rgba[idx])
-      ).join('');
+    ).join('');
     return "0x" + hex;
   }
 
@@ -1224,7 +1251,7 @@ class SpriteUtilities{
   color(value) {
 
     //Check if it's a number
-    if(!isNaN(value)){
+    if (!isNaN(value)) {
 
       //Yes, it is a number, so just return it
       return value;
@@ -1247,7 +1274,7 @@ class SpriteUtilities{
       }
       */
     }
-    
+
     /*
     //Find out if the first character in the string is a number
     if (!isNaN(parseInt(string.charAt(0)))) {
@@ -1264,8 +1291,5 @@ class SpriteUtilities{
   */
 
   }
-  
+
 }
-
-
-

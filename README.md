@@ -5,7 +5,7 @@ This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
 
 [Setting up](#settingup) <br>
-[sprite: Quickly make any Sprite or MovieClip](#sprite)<br>
+[sprite: Quickly make any Sprite or AnimatedSprite](#sprite)<br>
 [tilingSprite: Make a tiling sprite](#tilingSprite)<br>
 [filmstrip: Turn any tileset PNG into a texture array](#filmstrip)<br>
 [frames: Capture a subset of frames from a PNG tileset](#frames)<br>
@@ -59,11 +59,11 @@ You can essentially throw anything at it, and it will give you back a sprite tha
 depending on the kind of texture information you've supplied. That
 means you can use the `sprite` function 
 as your one-stop-shop for creating any kind of sprite. Forget about
-using Pixi's `Sprite` and `MovieClip` 
+using Pixi's `Sprite` and `AnimatedSprite` 
 classes to make sprites and just use the `sprite` function for everything!
 
 If you supply the `sprite` function with an array, it will return a
-`MovieClip` sprite but with a bonus 
+`AnimatedSprite` sprite but with a bonus 
 **state player**  built into it. The state player is just a collection of 4 properties and methods 
 that make it easy to control sprite animation states. Here they are:
 
@@ -112,7 +112,7 @@ u.filmstrip("anyTilesetImage.png", frameWidth, frameHeight, optionalPadding);
 Supply `filmstrip` with the tileset image name and the width and
 height of each frame. If there's padding around each frame, supply the
 padding amount, in pixels. `filmstrip` returns an array of frames that
-you can use to make an animated `MovieClip` sprite. 
+you can use to make an animated `AnimatedSprite` sprite. 
 Here's how you could use `filmstrip` with the universal `sprite`
 function to quickly make a sprite with multiple frames: 
 ```js
@@ -175,11 +175,11 @@ frame1.png
 frame2.png
 ```
 To create a sprite in Pixi using these frames, you would ordinarily
-write some code using Pixi's `MovieClip` class
-(`PIXI.extras.MovieClip`) that looks something like this:
+write some code using Pixi's `AnimatedSprite` class
+(`PIXI.extras.AnimatedSprite`) that looks something like this:
 ```js
 let frameTextures = ["frame0.png", "frame1.png", "frame2.png"];
-let anySprite = MovieClip.fromFrames(frameTextures);
+let anySprite = AnimatedSprite.fromFrames(frameTextures);
 ```
 You now have a sprite with 3 frames that you can control. That's not too painful, but what if you
 had 100 animation frames? You definitely don't want to manually type in

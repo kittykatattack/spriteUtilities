@@ -6,10 +6,10 @@ class SpriteUtilities {
     this.renderer = "";
 
     //If the `renderingEngine` is Pixi, set up Pixi object aliases
-    if (renderingEngine.ParticleContainer && renderingEngine.Sprite) {
+    if (renderingEngine.particles.ParticleContainer && renderingEngine.Sprite) {
       this.renderer = "pixi";
       this.Container = renderingEngine.Container;
-      this.ParticleContainer = renderingEngine.ParticleContainer;
+      this.ParticleContainer = renderingEngine.particles.ParticleContainer;
       this.TextureCache = renderingEngine.utils.TextureCache;
       this.Texture = renderingEngine.Texture;
       this.Rectangle = renderingEngine.Rectangle;

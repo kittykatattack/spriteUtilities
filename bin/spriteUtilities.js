@@ -603,7 +603,7 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -621,7 +621,7 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -639,7 +639,7 @@ var SpriteUtilities = (function () {
             draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -712,7 +712,7 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -730,7 +730,7 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -748,7 +748,7 @@ var SpriteUtilities = (function () {
             draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 
@@ -765,7 +765,7 @@ var SpriteUtilities = (function () {
             draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
 
             //Generate a new texture and set it as the sprite's texture
-            var texture = this.renderingEngine.renderer.generateTexture(o);
+            var texture = self.renderingEngine.renderer.generateTexture(o);
             o._sprite.texture = texture;
           },
 

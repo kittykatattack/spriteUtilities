@@ -544,7 +544,7 @@ class SpriteUtilities {
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -561,7 +561,7 @@ class SpriteUtilities {
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -578,7 +578,7 @@ class SpriteUtilities {
           draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth, o._x, o._y);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -648,7 +648,7 @@ class SpriteUtilities {
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -665,7 +665,7 @@ class SpriteUtilities {
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -682,7 +682,7 @@ class SpriteUtilities {
           draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -698,7 +698,7 @@ class SpriteUtilities {
           draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = this.renderingEngine.renderer.generateTexture(o);
+          let texture = self.renderingEngine.renderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,

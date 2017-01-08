@@ -7,6 +7,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var SpriteUtilities = (function () {
   function SpriteUtilities() {
     var renderingEngine = arguments.length <= 0 || arguments[0] === undefined ? PIXI : arguments[0];
+    var renderer = arguments[1];
 
     _classCallCheck(this, SpriteUtilities);
 
@@ -17,7 +18,7 @@ var SpriteUtilities = (function () {
 
     //If the `renderingEngine` is Pixi, set up Pixi object aliases
     if (renderingEngine.particles.ParticleContainer && renderingEngine.Sprite) {
-      this.renderer = "pixi";
+      this.renderer = renderer;
       this.renderingEngine = renderingEngine;
       this.Container = renderingEngine.Container;
       this.ParticleContainer = renderingEngine.particles.ParticleContainer;
@@ -470,14 +471,16 @@ var SpriteUtilities = (function () {
     key: "text",
     value: function text() {
       var content = arguments.length <= 0 || arguments[0] === undefined ? "message" : arguments[0];
-      var font = arguments.length <= 1 || arguments[1] === undefined ? "16px sans" : arguments[1];
-      var fillStyle = arguments.length <= 2 || arguments[2] === undefined ? "red" : arguments[2];
-      var x = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-      var y = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+      var fontFamily = arguments.length <= 1 || arguments[1] === undefined ? "sans" : arguments[1];
+      var fontSize = arguments.length <= 2 || arguments[2] === undefined ? "16px" : arguments[2];
+      var fillStyle = arguments.length <= 3 || arguments[3] === undefined ? "red" : arguments[3];
+      var x = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+      var y = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
 
       //Create a Pixi Sprite object
       var message = new this.Text(content, {
-        font: font,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
         fill: fillStyle
       });
       message.x = x;
@@ -508,15 +511,17 @@ var SpriteUtilities = (function () {
     key: "bitmapText",
     value: function bitmapText() {
       var content = arguments.length <= 0 || arguments[0] === undefined ? "message" : arguments[0];
-      var font = arguments[1];
-      var align = arguments[2];
-      var tint = arguments[3];
-      var x = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
-      var y = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
+      var fontFamily = arguments[1];
+      var fontSize = arguments[2];
+      var align = arguments[3];
+      var tint = arguments[4];
+      var x = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
+      var y = arguments.length <= 6 || arguments[6] === undefined ? 0 : arguments[6];
 
       //Create a Pixi Sprite object
       var message = new this.BitmapText(content, {
-        font: font,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
         align: align,
         tint: tint
       });
@@ -579,9 +584,12 @@ var SpriteUtilities = (function () {
       //Draw the line and capture the sprite that the `draw` function
       //returns
       draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
+      console.log(PIXI);
 
       //Generate a texture from the rectangle
-      var texture = this.renderingEngine.renderer.generateTexture(o);
+      var texture = this.renderer.generateTexture(o);
+
+      //*** Change all references to the renderer to look like they do above
 
       //Use the texture to create a sprite
       var sprite = new this.Sprite(texture);

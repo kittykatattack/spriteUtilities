@@ -1,5 +1,5 @@
 class SpriteUtilities {
-  constructor(renderingEngine = PIXI) {
+  constructor(renderingEngine = PIXI, renderer) {
     if (renderingEngine === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js");
 
     //Find out which rendering engine is being used (the default is Pixi)
@@ -7,7 +7,7 @@ class SpriteUtilities {
 
     //If the `renderingEngine` is Pixi, set up Pixi object aliases
     if (renderingEngine.particles.ParticleContainer && renderingEngine.Sprite) {
-      this.renderer = "pixi";
+      this.renderer = renderer;
       this.renderingEngine = renderingEngine;
       this.Container = renderingEngine.Container;
       this.ParticleContainer = renderingEngine.particles.ParticleContainer;
@@ -427,11 +427,12 @@ class SpriteUtilities {
   /* Text creation */
 
   //The`text` method is a quick way to create a Pixi Text sprite
-  text(content = "message", font = "16px sans", fillStyle = "red", x = 0, y = 0) {
+  text(content = "message", fontFamily = "sans", fontSize = "16px", fillStyle = "red", x = 0, y = 0) {
 
     //Create a Pixi Sprite object
     let message = new this.Text(content, {
-      font: font,
+      fontFamily: fontFamily,
+      fontSize: fontSize,
       fill: fillStyle
     });
     message.x = x;
@@ -456,11 +457,12 @@ class SpriteUtilities {
   }
 
   //The`bitmapText` method lets you create bitmap text
-  bitmapText(content = "message", font, align, tint, x = 0, y = 0) {
+  bitmapText(content = "message", fontFamily, fontSize, align, tint, x = 0, y = 0) {
 
     //Create a Pixi Sprite object
     let message = new this.BitmapText(content, {
-      font: font,
+      fontFamily: fontFamily,
+      fontSize: fontSize,
       align: align,
       tint: tint
     });
@@ -520,9 +522,12 @@ class SpriteUtilities {
     //Draw the line and capture the sprite that the `draw` function
     //returns
     draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
+    console.log(PIXI)
 
     //Generate a texture from the rectangle
-    let texture = this.renderingEngine.renderer.generateTexture(o);
+    let texture = this.renderer.generateTexture(o);
+
+    //*** Change all references to the renderer to look like they do above
 
     //Use the texture to create a sprite
     let sprite = new this.Sprite(texture);

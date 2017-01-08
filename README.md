@@ -4,6 +4,9 @@ Pixi Sprite Utilities
 This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
 
+*NOTE: Important API change for Pixi v3 users moving to Pixi v4: the SpriteUtilities constructor now requires a refrerence to a Pixi `renderer` as a second argument. See ahead for an example on how to implement this.*. Arguments for The `text` and `bitmapText` method have also changed: they now
+require seperate `fontFamily` and `fontSize` arguments in their constructor.
+
 [Setting up](#settingup) <br>
 [sprite: Quickly make any Sprite or AnimatedSprite](#sprite)<br>
 [tilingSprite: Make a tiling sprite](#tilingSprite)<br>
@@ -30,11 +33,11 @@ Setting up and initializing `SpriteUtilities`
 
 Create a new instance of `SpriteUtilities` like this:
 ```js
-let u = new SpriteUtilities(PIXI);
+let renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0x1099bb});
+let u = new SpriteUtilities(PIXI, renderer);
 ```
-Supply a reference to `PIXI` as the optional argument in the
-constructor. (If you don't supply it, `SpriteUtilites` will look for a
-global `PIXI` object and alert you with an error if it can't find it.)
+Supply a reference to `PIXI` as the first argument in the
+constructor. The second argument is a reference to your Pixi renderer.
 
 You can now access the `SpriteUtilites` instance and all its
 methods using the variable reference `u`.
@@ -206,11 +209,11 @@ That's much better!
 
 Use the `text` method to quickly create a text sprite.
 ```js
-let messgae = u.text("Hello!", "32px Futura", "black", xPosition, yPosition); 
+let messgae = u.text("Hello!", "Futura", "32px", "black", xPosition, yPosition); 
 ```
 Only the first argument, the text you want to display, is required.
-The second argument is the font size and family. You can use any
-system font, or a font from a loaded font file. The thrid argument is the
+The second argument is the font family and the third is its size. You can use any
+system font, or a font from a loaded font file. The fourth argument is the
 fill color. Text colors can provided as RGBA, HLSA, hexadecimal,
 or HTML color string values, such as “blue” or “green.” The last
 arguments are the text's x and y position.
@@ -218,9 +221,9 @@ arguments are the text's x and y position.
 You can add any additional Pixi text properties by setting the text sprite's
 `style` property.
 ```js
-message.style = {fill: "black", font: "16px Helvetica"}; 
+message.style = {fill: "black", fontFamily: "Helvetica", fontSize: "16px"}; 
 ```
-Check out the [full list of Pixi Text properties](http://pixijs.github.io/docs/PIXI.Text.html) to find out
+Check out the [full list of Pixi Text properties](http://pixijs.download/release/docs/PIXI.TextStyle.html) to find out
 which styles you can apply.
 
 To change the text display at any time, use the text's `content` property.
@@ -241,16 +244,16 @@ display more reliably across different platforms.
 The `bitmapText` method lets you quickly create a bitmap text sprite,
 like this:
 ```js
-let message = u.bitmapText("Hello!", "42px disko", align, tint, xPosition, yPosition); 
+let message = u.bitmapText("Hello!", "disko", "42px", align, tint, xPosition, yPosition); 
 ```
 Only the first argument, the text to display, is required. The second
-argument is the font size and family. 
+argument and third arguments are the font size and family. 
 
-The third argument is the alignment, which determines how the text
+The fourth argument is the alignment, which determines how the text
 should be displayed if it appears on more than one line. Alignment
 values can be any of these three strings: "left", "right" or "center".
 
-The fourth argument, tint, is the color that the font should be
+The fifth argument, tint, is the color that the font should be
 tinted. This can be any RGBA, HLASA, Hex, or HTML string color value.
 
 Finally, the last two values are the text's x and y position values.

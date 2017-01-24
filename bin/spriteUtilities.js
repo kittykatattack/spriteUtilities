@@ -249,6 +249,9 @@ var SpriteUtilities = (function () {
             if (sprite.loop) {
               sprite.gotoAndStop(startFrame);
               frameCounter = 1;
+            }else{
+              clearInterval(timerInterval);
+              sprite.onComplete();
             }
           }
       }

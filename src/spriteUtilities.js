@@ -504,8 +504,8 @@ class SpriteUtilities {
     o._sprite = undefined;
     o._width = width;
     o._height = height;
-    o._fillStyle = this.color(fillStyle);
-    o._strokeStyle = this.color(strokeStyle);
+    o._fillStyle = parseInt(this.color(fillStyle));
+    o._strokeStyle = parseInt(this.color(strokeStyle));
     o._lineWidth = lineWidth;
 
     //Draw the rectangle

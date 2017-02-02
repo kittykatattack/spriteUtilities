@@ -1341,7 +1341,7 @@ var SpriteUtilities = (function () {
       //No it's not a number, so it must be a string   
       else {
 
-          return this.colorToHex(value);
+          return parseInt(this.colorToHex(value));
           /*
            //Find out what kind of color string it is.
           //Let's first grab the first character of the string

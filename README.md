@@ -1,8 +1,10 @@
-Pixi Sprite Utilities
+Sprite Utilities for Pixi (v3.9)
 =====================
 
 This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
+
+(Important! Sprite Utilities targets Pixi v3.9, which is the most stable version of Pixi, and is the only version I can recommend using. This library will eventually be upgraded for Pixi v4 when the v4 branch matures.)
 
 [Setting up](#settingup) <br>
 [sprite: Quickly make any Sprite or MovieClip](#sprite)<br>

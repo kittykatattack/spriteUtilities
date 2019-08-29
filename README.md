@@ -1,4 +1,4 @@
-Sprite Utilities for Pixi (v3.0.11)
+Sprite Utilities for Pixi
 =====================
 
 This repository contains a bunch of useful functions for creating

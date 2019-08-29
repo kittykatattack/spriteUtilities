@@ -1,28 +1,26 @@
-class SpriteUtilities{
-  constructor(renderingEngine = PIXI) {
-    if (renderingEngine === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js"); 
+export class SpriteUtilities{
+  constructor(PIXI) {
+    if (PIXI === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js"); 
 
     //Find out which rendering engine is being used (the default is Pixi)
     this.renderer = "";
 
-    //If the `renderingEngine` is Pixi, set up Pixi object aliases
-    if (renderingEngine.ParticleContainer && renderingEngine.Sprite) {
-      this.renderer = "pixi";
-      this.Container = renderingEngine.Container;
-      this.ParticleContainer = renderingEngine.ParticleContainer;
-      this.TextureCache = renderingEngine.utils.TextureCache;
-      this.Texture = renderingEngine.Texture;
-      this.Rectangle = renderingEngine.Rectangle;
-      this.MovieClip = renderingEngine.extras.MovieClip;
-      this.BitmapText = renderingEngine.extras.BitmapText;
-      this.Sprite = renderingEngine.Sprite;
-      this.TilingSprite = renderingEngine.extras.TilingSprite;
-      this.Graphics = renderingEngine.Graphics;
-      this.Text = renderingEngine.Text;
-      
-      //An array to store all the shaking sprites
-      this.shakingSprites = [];
-    }
+    //If the `PIXI` is Pixi, set up Pixi object aliases
+    this.renderer = "pixi";
+    this.Container = PIXI.Container;
+    this.ParticleContainer = PIXI.ParticleContainer;
+    this.TextureCache = PIXI.utils.TextureCache;
+    this.Texture = PIXI.Texture;
+    this.Rectangle = PIXI.Rectangle;
+    this.AnimatedSprite = PIXI.AnimatedSprite;
+    this.BitmapText = PIXI.BitmapText;
+    this.Sprite = PIXI.Sprite;
+    this.TilingSprite = PIXI.TilingSprite;
+    this.Graphics = PIXI.Graphics;
+    this.Text = PIXI.Text;
+    
+    //An array to store all the shaking sprites
+    this.shakingSprites = [];
   }
 
   update() {
@@ -48,7 +46,7 @@ class SpriteUtilities{
 
       //If it's not is the cache, load it from the source file
       else {
-        texture = this.Texture.fromImage(source);
+        texture = this.Texture.from(source);
       }
 
       //If the texture was created, make the o
@@ -79,7 +77,7 @@ class SpriteUtilities{
       }
     }
 
-    //Create a `MovieClip` o if the `source` is an array
+    //Create a `AnimatedSprite` o if the `source` is an array
     else if (source instanceof Array) {
 
       //Is it an array of frame ids or textures?
@@ -92,11 +90,11 @@ class SpriteUtilities{
         if (this.TextureCache[source[0]]) {
 
           //It does, so it's an array of frame ids
-          o = this.MovieClip.fromFrames(source);
+          o = this.AnimatedSprite.fromFrames(source);
         } else {
 
           //It's not already in the cache, so let's load it
-          o = this.MovieClip.fromImages(source);
+          o = this.AnimatedSprite.fromImages(source);
         }
       }
 
@@ -105,8 +103,8 @@ class SpriteUtilities{
       else if (source[0] instanceof this.Texture) {
 
         //Yes, it's an array of textures. 
-        //Use them to make a MovieClip o 
-        o = new this.MovieClip(source);
+        //Use them to make a AnimatedSprite o 
+        o = new this.AnimatedSprite(source);
       }
     }
 
@@ -121,9 +119,9 @@ class SpriteUtilities{
       if (width) o.width = width;
       if (height) o.height = height;
 
-      //If the sprite is a MovieClip, add a state player so that
+      //If the sprite is a AnimatedSprite, add a state player so that
       //it's easier to control
-      if (o instanceof this.MovieClip) this.addStatePlayer(o);
+      if (o instanceof this.AnimatedSprite) this.addStatePlayer(o);
 
       //Assign the sprite
       return o;

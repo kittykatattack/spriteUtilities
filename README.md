@@ -4,7 +4,7 @@ Sprite Utilities for Pixi (v3.0.11)
 This repository contains a bunch of useful functions for creating
 [Pixi](https://github.com/GoodBoyDigital/pixi.js/) sprites and making them easier to work with.
 
-(Important! Sprite Utilities targets Pixi v3.0.11, which is the most stable version of Pixi, and is the only version I can recommend using. This library will eventually be upgraded for Pixi v4 when the v4 branch matures.)
+Sprite Utilities targets Pixi v5. (If you are looking for a version that works with Pixi 3 and 4, see the 1.0.0 release, here: https://github.com/kittykatattack/spriteUtilities/releases/tag/1.0.0);
 
 [Setting up](#settingup) <br>
 [sprite: Quickly make any Sprite or MovieClip](#sprite)<br>
@@ -29,6 +29,16 @@ This repository contains a bunch of useful functions for creating
 <a id="settingup"></a>
 Setting up and initializing `SpriteUtilities`
 -------------------------------------------
+
+Link the `spriteUtilities.js` file in your HTML document with a `<script>`
+tag.
+```js
+<script src="spriteUtilities.js"><script>
+```
+Or, import it as a module:
+```
+import {SpriteUtilities} from './spriteUtilities';
+```
 
 Create a new instance of `SpriteUtilities` like this:
 ```js

@@ -42,11 +42,20 @@ import {SpriteUtilities} from './spriteUtilities';
 
 Create a new instance of `SpriteUtilities` like this:
 ```js
-let u = new SpriteUtilities(PIXI);
+let u = new SpriteUtilities(PIXI, renderer);
 ```
-Supply a reference to `PIXI` as the optional argument in the
-constructor. (If you don't supply it, `SpriteUtilites` will look for a
-global `PIXI` object and alert you with an error if it can't find it.)
+The first argument is a reference to `PIXI`. The second is a reference to the Pixi renderer.
+For example, you might create your renderer and SpriteUtilities instance like this:
+```
+const renderer = new PIXI.Renderer({ 
+  width: 550, 
+  height: 400, 
+  backgroundColor: 0x000000 
+});
+document.body.appendChild(renderer.view);
+let u = new SpriteUtilities(PIXI, renderer);
+
+```
 
 You can now access the `SpriteUtilites` instance and all its
 methods using the variable reference `u`.

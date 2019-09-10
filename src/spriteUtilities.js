@@ -1,5 +1,5 @@
 export class SpriteUtilities{
-  constructor(PIXI) {
+  constructor(PIXI, pixiRenderer) {
     if (PIXI === undefined) throw new Error("Please supply a reference to PIXI in the SpriteUtilities constructor before using spriteUtilities.js"); 
 
     //Find out which rendering engine is being used (the default is Pixi)
@@ -18,6 +18,8 @@ export class SpriteUtilities{
     this.TilingSprite = PIXI.TilingSprite;
     this.Graphics = PIXI.Graphics;
     this.Text = PIXI.Text;
+    this.pixiRenderer = pixiRenderer;
+
     
     //An array to store all the shaking sprites
     this.shakingSprites = [];
@@ -486,8 +488,8 @@ export class SpriteUtilities{
     o._sprite = undefined;
     o._width = width;
     o._height = height;
-    o._fillStyle = this.color(fillStyle);
-    o._strokeStyle = this.color(strokeStyle);
+    o._fillStyleColor = this.color(fillStyle);
+    o._strokeStyleColor = this.color(strokeStyle);
     o._lineWidth = lineWidth;
 
     //Draw the rectangle
@@ -503,10 +505,11 @@ export class SpriteUtilities{
 
     //Draw the line and capture the sprite that the `draw` function
     //returns
-    draw(o._width, o._height, o._fillStyle, o._strokeStyle, o._lineWidth);
+    draw(o._width, o._height, o._fillStyleColor, o._strokeStyleColor, o._lineWidth);
 
     //Generate a texture from the rectangle
-    let texture = o.generateTexture();
+    //let texture = o.generateTexture();
+    let texture = this.pixiRenderer.generateTexture(o);
 
     //Use the texture to create a sprite
     let sprite = new this.Sprite(texture);

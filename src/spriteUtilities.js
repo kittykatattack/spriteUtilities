@@ -408,13 +408,14 @@ export class SpriteUtilities {
   //The`text` method is a quick way to create a Pixi Text sprite
   text(
     content = "message",
-    font = "16px sans",
-    fillStyle = "red",
+    fontFamily = "sans",
+    fontSize = "16",
+    fill = "red",
     x = 0,
     y = 0
   ) {
     //Create a Pixi Sprite object
-    let message = new this.Text(content, { font: font, fill: fillStyle });
+    let message = new this.Text(content, { fontFamily, fontSize, fill });
     message.x = x;
     message.y = y;
 

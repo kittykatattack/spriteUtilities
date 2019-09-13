@@ -408,8 +408,8 @@ export class SpriteUtilities {
   //The`text` method is a quick way to create a Pixi Text sprite
   text(
     content = "message",
-    fontFamily = "sans",
-    fontSize = "16",
+    fontFamily = "Helvetica, Arial, sans-serif",
+    fontSize = 16,
     fill = "red",
     x = 0,
     y = 0

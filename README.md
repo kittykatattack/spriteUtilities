@@ -283,7 +283,7 @@ Finally, the last two values are the text's x and y position values.
 The `rectangle` method lets you quickly draw a rectangle.
 ```js
 u.rectangle(
-  width, height, fillStyle, strokeStyle, lineWidth, xPosition, yPosition
+  width, height, fillStyle, strokeStyle, lineWidth, radius, xPosition, yPosition
 );
 ```
 `width` and `height` are the size, in pixels, of the rectangle.
@@ -295,6 +295,8 @@ can use hex colors, RGBA colors, or even any [HTML color names](http://www.w3sch
 should be. (The default value is 0, which means the rectangle will have
 no outline.) The last two values are the rectangle's x and y
 position.
+
+If you supply a `radius` value greater than `0`, the function will create a rounded rectangle with corner radius, in pixels, of the value you supplied.
 
 Here's how to use the `rectangle` method to create a green square
 with a 2 pixel wide pink outline:

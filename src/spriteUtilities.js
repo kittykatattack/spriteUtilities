@@ -475,9 +475,11 @@ export class SpriteUtilities {
     fillStyle = 0xff3300,
     strokeStyle = 0x0033cc,
     lineWidth = 0,
+    radius = 0,
     x = 0,
     y = 0
   ) {
+    console.log(lineWidth);
     let o = new this.Graphics();
     o._sprite = undefined;
     o._width = width;
@@ -485,6 +487,7 @@ export class SpriteUtilities {
     o._fillStyleColor = this.color(fillStyle);
     o._strokeStyleColor = this.color(strokeStyle);
     o._lineWidth = lineWidth;
+    o._radius = radius;
 
     //Draw the rectangle
     let draw = (width, height, fillStyle, strokeStyle, lineWidth) => {
@@ -493,7 +496,11 @@ export class SpriteUtilities {
       if (lineWidth > 0) {
         o.lineStyle(lineWidth, strokeStyle, 1);
       }
-      o.drawRect(0, 0, width, height);
+      if (o._radius === 0) {
+        o.drawRect(0, 0, width, height);
+      } else {
+        o.drawRoundedRect(0, 0, width, height, radius);
+      }
       o.endFill();
     };
 

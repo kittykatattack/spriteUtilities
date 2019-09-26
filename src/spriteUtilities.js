@@ -479,7 +479,6 @@ export class SpriteUtilities {
     x = 0,
     y = 0
   ) {
-    console.log(lineWidth);
     let o = new this.Graphics();
     o._sprite = undefined;
     o._width = width;
@@ -624,8 +623,8 @@ export class SpriteUtilities {
   ) {
     let o = new this.Graphics();
     o._diameter = diameter;
-    o._fillStyle = this.color(fillStyle);
-    o._strokeStyle = this.color(strokeStyle);
+    o._fillStyleColor = this.color(fillStyle);
+    o._strokeStyleColor = this.color(strokeStyle);
     o._lineWidth = lineWidth;
 
     //Draw the circle
@@ -640,10 +639,10 @@ export class SpriteUtilities {
     };
 
     //Draw the cirlce
-    draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+    draw(o._diameter, o._fillStyleColor, o._strokeStyleColor, o._lineWidth);
 
     //Generate a texture from the rectangle
-    let texture = o.generateTexture();
+    let texture = this.pixiRenderer.generateTexture(o);
 
     //Use the texture to create a sprite
     let sprite = new this.Sprite(texture);
@@ -657,13 +656,18 @@ export class SpriteUtilities {
     Object.defineProperties(sprite, {
       fillStyle: {
         get() {
-          return o._fillStyle;
+          return o._fillStyleColor;
         },
         set(value) {
-          o._fillStyle = self.color(value);
+          o._fillStyleColor = self.color(value);
 
           //Draw the cirlce
-          draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+          draw(
+            o._diameter,
+            o._fillStyleColor,
+            o._strokeStyleColor,
+            o._lineWidth
+          );
 
           //Generate a new texture and set it as the sprite's texture
           let texture = o.generateTexture();
@@ -674,13 +678,18 @@ export class SpriteUtilities {
       },
       strokeStyle: {
         get() {
-          return o._strokeStyle;
+          return o._strokeStyleColor;
         },
         set(value) {
-          o._strokeStyle = self.color(value);
+          o._strokeStyleColor = self.color(value);
 
           //Draw the cirlce
-          draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+          draw(
+            o._diameter,
+            o._fillStyleColor,
+            o._strokeStyleColor,
+            o._lineWidth
+          );
 
           //Generate a new texture and set it as the sprite's texture
           let texture = o.generateTexture();
@@ -697,7 +706,12 @@ export class SpriteUtilities {
           o._lineWidth = 10;
 
           //Draw the cirlce
-          draw(o._diameter, o._fillStyle, o._strokeStyle, o._lineWidth);
+          draw(
+            o._diameter,
+            o._fillStyleColor,
+            o._strokeStyleColor,
+            o._lineWidth
+          );
 
           //Generate a new texture and set it as the sprite's texture
           let texture = o.generateTexture();
@@ -712,7 +726,7 @@ export class SpriteUtilities {
         },
         set(value) {
           //Draw the cirlce
-          draw(value * 2, o._fillStyle, o._strokeStyle, o._lineWidth);
+          draw(value * 2, o._fillStyleColor, o._strokeStyleColor, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
           let texture = o.generateTexture();

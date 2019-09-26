@@ -546,7 +546,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -571,7 +571,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -596,7 +596,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -670,7 +670,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -692,7 +692,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -714,7 +714,7 @@ export class SpriteUtilities {
           );
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,
@@ -729,7 +729,7 @@ export class SpriteUtilities {
           draw(value * 2, o._fillStyleColor, o._strokeStyleColor, o._lineWidth);
 
           //Generate a new texture and set it as the sprite's texture
-          let texture = o.generateTexture();
+          let texture = this.pixiRenderer.generateTexture(o);
           o._sprite.texture = texture;
         },
         enumerable: true,

@@ -757,7 +757,7 @@ export class SpriteUtilities {
     let o = new this.Graphics();
 
     //Private properties
-    o._strokeStyle = this.color(strokeStyle);
+    o._strokeStyleColor = this.color(strokeStyle);
     o._width = lineWidth;
     o._ax = ax;
     o._ay = ay;
@@ -773,7 +773,7 @@ export class SpriteUtilities {
     };
 
     //Draw the line
-    draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+    draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
 
     //Define getters and setters that redefine the line's start and
     //end points and re-draws it if they change
@@ -785,7 +785,7 @@ export class SpriteUtilities {
         },
         set(value) {
           o._ax = value;
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
@@ -796,7 +796,7 @@ export class SpriteUtilities {
         },
         set(value) {
           o._ay = value;
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
@@ -807,7 +807,7 @@ export class SpriteUtilities {
         },
         set(value) {
           o._bx = value;
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
@@ -818,20 +818,20 @@ export class SpriteUtilities {
         },
         set(value) {
           o._by = value;
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
       },
       strokeStyle: {
         get() {
-          return o._strokeStyle;
+          return o._strokeStyleColor;
         },
         set(value) {
-          o._strokeStyle = self.color(value);
+          o._strokeStyleColor = self.color(value);
 
           //Draw the line
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
@@ -844,7 +844,7 @@ export class SpriteUtilities {
           o._width = value;
 
           //Draw the line
-          draw(o._strokeStyle, o._width, o._ax, o._ay, o._bx, o._by);
+          draw(o._strokeStyleColor, o._width, o._ax, o._ay, o._bx, o._by);
         },
         enumerable: true,
         configurable: true
